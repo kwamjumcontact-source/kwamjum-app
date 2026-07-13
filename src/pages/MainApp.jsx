@@ -184,6 +184,7 @@ const MainApp = () => {
         <StatsView 
           decks={decks}
           streak={streak}
+          reviewLogs={reviewLogs}
           onBack={() => setCurrentView('dashboard')}
         />
       )}

@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import './StatsView.css';
 
-const MOCK_ACTIVITY_DATA = [
-  { name: 'Mon', cards: 15 },
-  { name: 'Tue', cards: 28 },
-  { name: 'Wed', cards: 12 },
-  { name: 'Thu', cards: 45 },
-  { name: 'Fri', cards: 35 },
-  { name: 'Sat', cards: 52 },
-  { name: 'Today', cards: 20 },
-];
-
-const StatsView = ({ decks, streak, onBack }) => {
+const StatsView = ({ decks, streak, reviewLogs, onBack }) => {
   const [note, setNote] = useState(localStorage.getItem('kwamjum_note') || '');
+
+  const chartData = useMemo(() => {
+    const data = [];
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+    // Create an array for the last 7 days
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const name = i === 0 ? 'Today' : days[d.getDay()];
+      data.push({
+        name,
+        dateStr: d.toISOString().split('T')[0],
+        cards: 0
+      });
+    }
+
+    // Populate with actual logs
+    if (reviewLogs) {
+      reviewLogs.forEach(log => {
+        const logDate = log.reviewed_at.split('T')[0];
+        const dataPoint = data.find(d => d.dateStr === logDate);
+        if (dataPoint) {
+          dataPoint.cards += 1;
+        }
+      });
+    }
+
+    return data;
+  }, [reviewLogs]);
 
   const saveNote = (e) => {
     setNote(e.target.value);
@@ -38,7 +58,7 @@ const StatsView = ({ decks, streak, onBack }) => {
         <div className="chart-wrapper">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={MOCK_ACTIVITY_DATA}
+              data={chartData}
               margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
             >
               <defs>
