@@ -9,20 +9,6 @@ import AccountSettings from './pages/AccountSettings';
 import HelpFeedback from './pages/HelpFeedback';
 import './App.css';
 
-// Temporary Dashboard for testing authentication
-const DummyDashboard = () => {
-  const { user, signOut } = useAuth();
-  
-  return (
-    <div style={{ padding: '20px', color: 'white' }}>
-      <h1>Dashboard</h1>
-      <p>Welcome, {user?.email}!</p>
-      <button onClick={signOut} style={{ background: '#ef4444', color: 'white', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-        Log Out
-      </button>
-    </div>
-  );
-};
 
 function App() {
   return (

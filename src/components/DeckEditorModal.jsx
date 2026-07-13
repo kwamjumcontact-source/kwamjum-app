@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './DeckEditorModal.css';
 
 const DeckEditorModal = ({ onClose, onSave, onDelete, initialDeck = null }) => {

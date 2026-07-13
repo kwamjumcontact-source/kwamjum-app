@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { getProfile, updateProfile } from '../lib/db';
 import { useNavigate } from 'react-router-dom';
@@ -28,16 +28,16 @@ const AccountSettings = () => {
     if (user) {
       fetchProfileData();
     }
-  }, [user]);
+  }, [user, fetchProfileData]);
 
-  const fetchProfileData = async () => {
+  const fetchProfileData = useCallback(async () => {
     try {
       const data = await getProfile(user.id);
       if (data) {
-        setProfile({
-          ...profile,
+        setProfile((prev) => ({
+          ...prev,
           ...data
-        });
+        }));
         setNewUsername(data.username);
         // Apply theme/font immediately if loaded
         if (data.ui_theme) {
@@ -53,7 +53,7 @@ const AccountSettings = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.id]);
 
   const handleAvatarSelect = async (emoji) => {
     const updated = { ...profile, avatar: emoji };

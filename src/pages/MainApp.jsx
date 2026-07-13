@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, updateCard, deleteCard, saveCardReview, logReview, getReviewLogs, getProfile, updateStreak } from '../lib/db';
+import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, deleteCard, saveCardReview, logReview, getReviewLogs, getProfile, updateStreak } from '../lib/db';
 import Dashboard from '../components/Dashboard';
 import StudyView from '../components/StudyView';
 import StatsView from '../components/StatsView';
@@ -9,7 +9,7 @@ import { processReview } from '../lib/anki';
 import '../App.css'; // Inherited from prototype
 
 const MainApp = () => {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   
   const [currentView, setCurrentView] = useState('dashboard');
   const [activeDeckId, setActiveDeckId] = useState(null);
@@ -29,7 +29,7 @@ const MainApp = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   // Fetch initial data
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const fetchedDecks = await getDecks(user.id);
@@ -61,11 +61,11 @@ const MainApp = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.id, currentDate]);
 
   useEffect(() => {
     fetchData();
-  }, [user, currentDate]);
+  }, [user, currentDate, fetchData]);
 
   // SM-2 Algorithm Integration (Anki Style)
   const handleRating = async (cardId, rating) => {
@@ -99,11 +99,6 @@ const MainApp = () => {
     }
   };
 
-  const simulateNextDay = () => {
-    const nextDay = new Date(currentDate);
-    nextDay.setDate(nextDay.getDate() + 1);
-    setCurrentDate(nextDay);
-  };
 
   // Deck Management
   const handleSaveDeck = async (deckData) => {

@@ -8,6 +8,25 @@ const StudyView = ({ deck, dueCards, autoFlipSeconds = 0, onRating, onFinish }) 
   const [isFlipped, setIsFlipped] = useState(false);
   const [sessionCompleted, setSessionCompleted] = useState(false);
 
+  const currentCard = dueCards[currentIndex];
+
+  // Calculate dynamic intervals for the current card
+  let nextIntervals = null;
+  if (currentCard) {
+    nextIntervals = calculateNextIntervals(currentCard);
+  }
+
+  // Auto-flip logic
+  useEffect(() => {
+    let timer;
+    if (!isFlipped && currentCard && autoFlipSeconds > 0) {
+      timer = setTimeout(() => {
+        setIsFlipped(true);
+      }, autoFlipSeconds * 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [currentIndex, isFlipped, currentCard, autoFlipSeconds]);
+
   // If no cards are due at all
   if (dueCards.length === 0) {
     return (
@@ -35,24 +54,7 @@ const StudyView = ({ deck, dueCards, autoFlipSeconds = 0, onRating, onFinish }) 
     );
   }
 
-  const currentCard = dueCards[currentIndex];
-  
-  // Calculate dynamic intervals for the current card
-  let nextIntervals = null;
-  if (currentCard) {
-    nextIntervals = calculateNextIntervals(currentCard);
-  }
-
-  // Auto-flip logic
-  useEffect(() => {
-    let timer;
-    if (!isFlipped && currentCard && autoFlipSeconds > 0) {
-      timer = setTimeout(() => {
-        setIsFlipped(true);
-      }, autoFlipSeconds * 1000);
-    }
-    return () => clearTimeout(timer);
-  }, [currentIndex, isFlipped, currentCard, autoFlipSeconds]);
+  // Auto-flip was moved up
 
   const handleRatingClick = (rating) => {
     onRating(currentCard.id, rating);
