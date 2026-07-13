@@ -49,15 +49,12 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* App takes full height */
+  flex-direction: column;
 }
 
 #root {
   width: 100%;
-  max-width: 600px; /* Mobile/tablet friendly */
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
