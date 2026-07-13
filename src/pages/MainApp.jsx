@@ -119,11 +119,32 @@ const MainApp = () => {
   // Deck Management
   const handleSaveDeck = async (deckData) => {
     try {
-      if (editingDeck?.id) {
-        await updateDeck(editingDeck.id, deckData.title, deckData.description, deckData.color);
+      let savedDeckId = editingDeck?.id;
+      if (savedDeckId) {
+        await updateDeck(savedDeckId, deckData.title, deckData.description, deckData.color);
       } else {
-        await createDeck(user.id, deckData.title, deckData.description, deckData.color);
+        const newDeck = await createDeck(user.id, deckData.title, deckData.description, deckData.color);
+        savedDeckId = newDeck.id;
       }
+
+      // Sync Cards
+      const currentCards = editingDeck?.cards || [];
+      const newCards = deckData.cards || [];
+
+      // Delete removed cards
+      for (const oldCard of currentCards) {
+        if (!newCards.find(c => c.id === oldCard.id)) {
+          await deleteCard(oldCard.id);
+        }
+      }
+
+      // Add new cards
+      for (const card of newCards) {
+        if (typeof card.id === 'number') {
+          await createCard(user.id, savedDeckId, card);
+        }
+      }
+
       setIsEditorOpen(false);
       fetchData();
     } catch (e) {
@@ -184,11 +205,10 @@ const MainApp = () => {
 
       {isEditorOpen && (
         <DeckEditorModal
-          deck={editingDeck}
+          initialDeck={editingDeck}
           onClose={() => setIsEditorOpen(false)}
           onSave={handleSaveDeck}
           onDelete={handleDeleteDeck}
-          // Note: Full card editing within modal needs to be wired to Supabase too (omitted for brevity here but structure is ready)
         />
       )}
     </div>
