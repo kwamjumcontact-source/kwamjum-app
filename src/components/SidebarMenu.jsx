@@ -77,6 +77,7 @@ const SidebarMenu = ({ isOpen, onClose }) => {
         
         <div className="sidebar-footer">
           <p>Kwamjum v1.0.0 (Production)</p>
+          <p style={{ marginTop: '5px', color: 'var(--text-secondary)' }}>Contact us: kwamjum.contact@gmail.com</p>
         </div>
       </div>
     </>

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Auth from './pages/Auth';
+import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 import MainApp from './pages/MainApp';
 import AccountSettings from './pages/AccountSettings';
@@ -27,8 +28,9 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public Route */}
+          {/* Public Routes */}
           <Route path="/login" element={<Auth />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           
           {/* Protected Routes */}
           <Route 

@@ -149,3 +149,78 @@ export const getReviewLogs = async (userId, daysAgo = 7) => {
   if (error) throw error;
   return data;
 };
+
+// --- Profile & Streak ---
+
+export const getProfile = async (userId) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+    
+  if (error && error.code !== 'PGRST116') throw error; // Ignore not found error
+  return data;
+};
+
+export const updateStreak = async (userId) => {
+  try {
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('current_streak, longest_streak, last_activity_date')
+      .eq('id', userId)
+      .single();
+
+    if (profileError) {
+      if (profileError.code === 'PGRST116') return null; // No profile found, skip streak
+      throw profileError;
+    }
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const currentActivityDate = `${year}-${month}-${day}`;
+
+    let newCurrentStreak = profile.current_streak || 0;
+    let newLongestStreak = profile.longest_streak || 0;
+    const lastActivityDate = profile.last_activity_date;
+
+    if (!lastActivityDate) {
+      newCurrentStreak = 1;
+    } else if (lastActivityDate !== currentActivityDate) {
+      const lastDate = new Date(lastActivityDate);
+      const currentDateObj = new Date(currentActivityDate);
+      
+      const diffTime = currentDateObj.getTime() - lastDate.getTime();
+      const diffDays = Math.round(diffTime / (1000 * 3600 * 24));
+
+      if (diffDays === 1) {
+        newCurrentStreak += 1;
+      } else if (diffDays > 1) {
+        newCurrentStreak = 1;
+      }
+    }
+
+    if (newCurrentStreak > newLongestStreak) {
+      newLongestStreak = newCurrentStreak;
+    }
+
+    const { data: updatedProfile, error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        current_streak: newCurrentStreak,
+        longest_streak: newLongestStreak,
+        last_activity_date: currentActivityDate,
+      })
+      .eq('id', userId)
+      .select()
+      .single();
+
+    if (updateError) throw updateError;
+    return updatedProfile;
+  } catch (e) {
+    console.error("Streak update error:", e);
+    return null;
+  }
+};

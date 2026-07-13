@@ -1,0 +1,103 @@
+import React, { useState } from 'react';
+import Flashcard from './Flashcard';
+import './StudyView.css';
+
+const StudyView = ({ deck, dueCards, onRating, onFinish }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [sessionCompleted, setSessionCompleted] = useState(false);
+
+  // If no cards are due at all
+  if (dueCards.length === 0) {
+    return (
+      <div className="study-view-container empty-state">
+        <div className="completion-card">
+          <h2>🎉 You're all caught up!</h2>
+          <p>No more cards due for <strong>{deck.title}</strong> right now.</p>
+          <button className="finish-btn" onClick={onFinish}>Return to Dashboard</button>
+        </div>
+      </div>
+    );
+  }
+
+  // If finished studying the queue
+  if (sessionCompleted || currentIndex >= dueCards.length) {
+    return (
+      <div className="study-view-container finished-state">
+        <div className="completion-card">
+          <h2>🎉 Session Complete!</h2>
+          <p>Great job studying <strong>{deck.title}</strong>.</p>
+          <p>You've reviewed {dueCards.length} cards.</p>
+          <button className="finish-btn" onClick={onFinish}>Complete & Update Streak</button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentCard = dueCards[currentIndex];
+
+  const handleRatingClick = (rating) => {
+    onRating(currentCard.id, rating);
+    
+    // Move to next card
+    setIsFlipped(false);
+    if (currentIndex + 1 >= dueCards.length) {
+      setSessionCompleted(true);
+    } else {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  return (
+    <div className="study-view-container">
+      <div className="study-header">
+        <span className="deck-title">{deck.title}</span>
+        <span className="progress-counter">
+          {currentIndex + 1} / {dueCards.length}
+        </span>
+      </div>
+
+      <div className="progress-bar-container">
+        <div 
+          className="progress-bar-fill" 
+          style={{ width: `${((currentIndex) / dueCards.length) * 100}%` }}
+        />
+      </div>
+
+      <Flashcard 
+        card={currentCard} 
+        isFlipped={isFlipped} 
+        setIsFlipped={setIsFlipped} 
+      />
+
+      {isFlipped ? (
+        <div className="rating-buttons">
+          <button className="rating-btn again" onClick={() => handleRatingClick('again')}>
+            <span className="rating-label">Again</span>
+            <span className="rating-time">&lt; 1m</span>
+          </button>
+          <button className="rating-btn hard" onClick={() => handleRatingClick('hard')}>
+            <span className="rating-label">Hard</span>
+            <span className="rating-time">Days</span>
+          </button>
+          <button className="rating-btn good" onClick={() => handleRatingClick('good')}>
+            <span className="rating-label">Good</span>
+            <span className="rating-time">Weeks</span>
+          </button>
+          <button className="rating-btn easy" onClick={() => handleRatingClick('easy')}>
+            <span className="rating-label">Easy</span>
+            <span className="rating-time">Months</span>
+          </button>
+        </div>
+      ) : (
+        <div className="show-answer-container">
+          <button className="show-answer-btn" onClick={() => setIsFlipped(true)}>
+            Show Answer
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default StudyView;

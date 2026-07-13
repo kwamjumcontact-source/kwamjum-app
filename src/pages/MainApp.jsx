@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, updateCard, deleteCard, saveCardReview, logReview, getReviewLogs } from '../lib/db';
+import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, updateCard, deleteCard, saveCardReview, logReview, getReviewLogs, getProfile, updateStreak } from '../lib/db';
 import Dashboard from '../components/Dashboard';
-import Flashcard from '../components/Flashcard';
+import StudyView from '../components/StudyView';
 import StatsView from '../components/StatsView';
 import DeckEditorModal from '../components/DeckEditorModal';
 import '../App.css'; // Inherited from prototype
@@ -16,6 +16,8 @@ const MainApp = () => {
   // Database State
   const [decks, setDecks] = useState([]);
   const [reviewLogs, setReviewLogs] = useState([]);
+  const [streak, setStreak] = useState(0);
+  const [totalStudied, setTotalStudied] = useState(0);
   const [loading, setLoading] = useState(true);
   
   // Modals
@@ -42,9 +44,16 @@ const MainApp = () => {
       
       setDecks(decksWithCards);
 
-      // Fetch review logs
+      // Fetch review logs & stats
       const logs = await getReviewLogs(user.id, 7);
       setReviewLogs(logs);
+      setTotalStudied(logs.length);
+
+      // Fetch Profile for Streak
+      const profile = await getProfile(user.id);
+      if (profile) {
+        setStreak(profile.current_streak || 0);
+      }
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -172,8 +181,8 @@ const MainApp = () => {
       {currentView === 'dashboard' && (
         <Dashboard 
           decks={decks}
-          streak={0} // To be implemented with user profile later
-          totalStudied={0}
+          streak={streak}
+          totalStudied={totalStudied}
           onNewDeck={() => { setEditingDeck(null); setIsEditorOpen(true); }}
           onEditDeck={(deck) => { setEditingDeck(deck); setIsEditorOpen(true); }}
           startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
@@ -182,23 +191,23 @@ const MainApp = () => {
       )}
 
       {currentView === 'study' && activeDeck && (
-        <div className="study-container">
-          <button className="back-btn" onClick={() => setCurrentView('dashboard')}>
-            ← Back to Dashboard
-          </button>
-          
-          <Flashcard 
-            deck={activeDeck}
-            onRating={handleRating}
-            currentDate={currentDate}
-          />
-        </div>
+        <StudyView 
+          deck={activeDeck}
+          dueCards={activeDeck.cards.filter(c => new Date(c.due_date) <= currentDate)}
+          onRating={handleRating}
+          onFinish={async () => {
+            // Update streak on completion
+            const profile = await updateStreak(user.id);
+            if (profile) setStreak(profile.current_streak);
+            setCurrentView('dashboard');
+          }}
+        />
       )}
 
       {currentView === 'stats' && (
         <StatsView 
           decks={decks}
-          streak={0}
+          streak={streak}
           onBack={() => setCurrentView('dashboard')}
         />
       )}
