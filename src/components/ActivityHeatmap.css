@@ -55,6 +55,11 @@
   z-index: 10;
 }
 
+.heatmap-cell.ghost {
+  opacity: 0.3;
+  filter: grayscale(0.8);
+}
+
 .heatmap-legend {
   display: flex;
   align-items: center;

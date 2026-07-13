@@ -41,15 +41,25 @@ const ActivityHeatmap = ({ logs }) => {
         
         // Determine intensity level (0-4)
         let intensity = 0;
-        if (count > 0) intensity = 1;
-        if (count >= 10) intensity = 2;
-        if (count >= 30) intensity = 3;
-        if (count >= 50) intensity = 4;
+        let isGhost = false;
+
+        if (logs && logs.length > 0) {
+          if (count > 0) intensity = 1;
+          if (count >= 10) intensity = 2;
+          if (count >= 30) intensity = 3;
+          if (count >= 50) intensity = 4;
+        } else {
+          // Ghost pattern for empty states (a wave or random pattern)
+          isGhost = true;
+          // Simple visual pattern based on index
+          intensity = ((w + d) % 3 === 0) ? ((w % 2 === 0) ? 2 : 1) : 0;
+        }
 
         weekCol.push({
           date: dateStr,
           count,
-          intensity
+          intensity,
+          isGhost
         });
       }
       data.push(weekCol);
@@ -67,8 +77,8 @@ const ActivityHeatmap = ({ logs }) => {
               return (
                 <div 
                   key={dIndex} 
-                  className={`heatmap-cell level-${day.intensity}`}
-                  title={`${day.count} reviews on ${day.date}`}
+                  className={`heatmap-cell level-${day.intensity} ${day.isGhost ? 'ghost' : ''}`}
+                  title={day.isGhost ? "Start studying to light up this day!" : `${day.count} reviews on ${day.date}`}
                 ></div>
               );
             })}
