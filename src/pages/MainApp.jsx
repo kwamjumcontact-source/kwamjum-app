@@ -66,23 +66,24 @@ const MainApp = () => {
     fetchData();
   }, [user, currentDate]);
 
-  // SM-2 Logic ported to work with async DB
+  // SM-2 Algorithm Integration
   const handleRating = async (cardId, rating) => {
     const deck = decks.find(d => d.id === activeDeckId);
     const card = deck.cards.find(c => c.id === cardId);
     
-    let { repetitions, ease, interval } = card;
-    let quality = 0;
+    let { repetitions = 0, ease = 2.5, interval = 0 } = card;
+    let qualityScore = 0;
 
     switch(rating) {
-      case 'again': quality = 0; break;
-      case 'hard': quality = 3; break;
-      case 'good': quality = 4; break;
-      case 'easy': quality = 5; break;
-      default: quality = 0;
+      case 'again': qualityScore = 0; break;
+      case 'hard': qualityScore = 3; break;
+      case 'good': qualityScore = 4; break;
+      case 'easy': qualityScore = 5; break;
+      default: qualityScore = 0;
     }
 
-    if (quality >= 3) {
+    // Rule 1: Correct answers
+    if (qualityScore >= 3) {
       if (repetitions === 0) {
         interval = 1;
       } else if (repetitions === 1) {
@@ -91,24 +92,28 @@ const MainApp = () => {
         interval = Math.round(interval * ease);
       }
       repetitions += 1;
-    } else {
+    } 
+    // Rule 2: Incorrect answers
+    else {
       repetitions = 0;
-      interval = 1; // Actually in our old SM-2 we did 0.001 for again, but let's keep it simple or exact
-      if(quality === 0) interval = 0.001;
+      interval = 1;
     }
 
-    ease = ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
-    if (ease < 1.3) ease = 1.3;
+    // Rule 3: Update ease_factor
+    ease = ease + (0.1 - (5 - qualityScore) * (0.08 + (5 - qualityScore) * 0.02));
+    if (ease < 1.3) {
+      ease = 1.3;
+    }
 
     // Calculate new due date based on simulated currentDate
     const newDueDate = new Date(currentDate.getTime() + interval * 24 * 60 * 60 * 1000);
 
     // Save to Supabase
     try {
-      await logReview(user.id, deckId, cardId, rating);
+      await logReview(user.id, activeDeckId, cardId, rating);
       await saveCardReview(cardId, {
         repetitions,
-        ease,
+        ease: parseFloat(ease.toFixed(2)),
         interval,
         due_date: newDueDate.toISOString()
       });
