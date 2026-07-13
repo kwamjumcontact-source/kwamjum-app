@@ -17,7 +17,7 @@ const MainApp = () => {
   // Database State
   const [decks, setDecks] = useState([]);
   const [reviewLogs, setReviewLogs] = useState([]);
-  const [streak, setStreak] = useState(0);
+  const [userProfile, setUserProfile] = useState(null);
   const [totalStudied, setTotalStudied] = useState(0);
   const [loading, setLoading] = useState(true);
   
@@ -50,10 +50,10 @@ const MainApp = () => {
       setReviewLogs(logs);
       setTotalStudied(logs.length);
 
-      // Fetch Profile for Streak
+      // Fetch Profile for Streak & Settings
       const profile = await getProfile(user.id);
       if (profile) {
-        setStreak(profile.current_streak || 0);
+        setUserProfile(profile);
       }
 
     } catch (error) {
@@ -75,9 +75,13 @@ const MainApp = () => {
     // Process new state using Anki logic
     const { repetitions, ease, interval } = processReview(card, rating);
 
+    // Apply max interval constraint
+    const maxInterval = userProfile?.max_interval_days || 365;
+    const finalInterval = Math.min(interval, maxInterval);
+
     // Calculate new due date based on simulated currentDate
     // interval is returned in DAYS from processReview
-    const newDueDate = new Date(currentDate.getTime() + interval * 24 * 60 * 60 * 1000);
+    const newDueDate = new Date(currentDate.getTime() + finalInterval * 24 * 60 * 60 * 1000);
 
     // Save to Supabase
     try {
@@ -85,7 +89,7 @@ const MainApp = () => {
       await saveCardReview(cardId, {
         repetitions,
         ease: parseFloat(ease.toFixed(2)),
-        interval,
+        interval: finalInterval,
         due_date: newDueDate.toISOString()
       });
       // Refresh data to reflect new due dates
@@ -157,8 +161,9 @@ const MainApp = () => {
       {currentView === 'dashboard' && (
         <Dashboard 
           decks={decks}
-          streak={streak}
+          streak={userProfile?.current_streak || 0}
           totalStudied={totalStudied}
+          dailyGoal={userProfile?.daily_goal || 20}
           onNewDeck={() => { setEditingDeck(null); setIsEditorOpen(true); }}
           onEditDeck={(deck) => { setEditingDeck(deck); setIsEditorOpen(true); }}
           startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
@@ -170,11 +175,12 @@ const MainApp = () => {
         <StudyView 
           deck={activeDeck}
           dueCards={activeDeck.cards.filter(c => new Date(c.due_date) <= currentDate)}
+          autoFlipSeconds={userProfile?.auto_flip_seconds || 0}
           onRating={handleRating}
           onFinish={async () => {
             // Update streak on completion
             const profile = await updateStreak(user.id);
-            if (profile) setStreak(profile.current_streak);
+            if (profile) setUserProfile(profile);
             setCurrentView('dashboard');
           }}
         />
@@ -183,7 +189,7 @@ const MainApp = () => {
       {currentView === 'stats' && (
         <StatsView 
           decks={decks}
-          streak={streak}
+          streak={userProfile?.current_streak || 0}
           reviewLogs={reviewLogs}
           onBack={() => setCurrentView('dashboard')}
         />

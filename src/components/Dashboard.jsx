@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SidebarMenu from './SidebarMenu';
 import './Dashboard.css';
 
-const Dashboard = ({ decks, startStudy, totalStudied, onNewDeck, onEditDeck, onViewStats, streak }) => {
+const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck, onEditDeck, onViewStats, streak }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -24,7 +24,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, onNewDeck, onEditDeck, onV
           </div>
           <div className="global-stats" style={{ cursor: 'pointer' }} onClick={onViewStats} title="View Detailed Stats">
           <div className="stat-box">
-            <span className="stat-value">{totalStudied}</span>
+            <span className="stat-value">{totalStudied} <span style={{fontSize: '14px', color: 'var(--text-secondary)'}}>/ {dailyGoal}</span></span>
             <span className="stat-label">Reviewed</span>
           </div>
           <div className="stat-box streak-box">

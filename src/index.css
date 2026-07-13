@@ -25,6 +25,18 @@
   --input-bg: rgba(0, 0, 0, 0.03);
 }
 
+[data-font-size="small"] {
+  font-size: 14px;
+}
+
+[data-font-size="medium"] {
+  font-size: 16px;
+}
+
+[data-font-size="large"] {
+  font-size: 20px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

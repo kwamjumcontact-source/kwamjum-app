@@ -163,6 +163,18 @@ export const getProfile = async (userId) => {
   return data;
 };
 
+export const updateProfile = async (userId, updates) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .update(updates)
+    .eq('id', userId)
+    .select()
+    .single();
+    
+  if (error) throw error;
+  return data;
+};
+
 export const updateStreak = async (userId) => {
   try {
     const { data: profile, error: profileError } = await supabase

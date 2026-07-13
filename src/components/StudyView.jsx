@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Flashcard from './Flashcard';
 import { calculateNextIntervals, formatTime } from '../lib/anki';
 import './StudyView.css';
 
-const StudyView = ({ deck, dueCards, onRating, onFinish }) => {
+const StudyView = ({ deck, dueCards, autoFlipSeconds = 0, onRating, onFinish }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [sessionCompleted, setSessionCompleted] = useState(false);
@@ -42,6 +42,17 @@ const StudyView = ({ deck, dueCards, onRating, onFinish }) => {
   if (currentCard) {
     nextIntervals = calculateNextIntervals(currentCard);
   }
+
+  // Auto-flip logic
+  useEffect(() => {
+    let timer;
+    if (!isFlipped && currentCard && autoFlipSeconds > 0) {
+      timer = setTimeout(() => {
+        setIsFlipped(true);
+      }, autoFlipSeconds * 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [currentIndex, isFlipped, currentCard, autoFlipSeconds]);
 
   const handleRatingClick = (rating) => {
     onRating(currentCard.id, rating);
@@ -98,6 +109,11 @@ const StudyView = ({ deck, dueCards, onRating, onFinish }) => {
         </div>
       ) : (
         <div className="show-answer-container">
+          {autoFlipSeconds > 0 && (
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '10px' }}>
+              Auto-flipping in {autoFlipSeconds}s...
+            </div>
+          )}
           <button className="show-answer-btn" onClick={() => setIsFlipped(true)}>
             Show Answer
           </button>
