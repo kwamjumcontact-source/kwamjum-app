@@ -47,7 +47,7 @@ const SidebarMenu = ({ isOpen, onClose }) => {
             </span>
             {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
           </button>
-          <button className="menu-item" onClick={() => handleItemClick('Settings')}>
+          <button className="menu-item" onClick={goToAccount}>
             <span className="icon">⚙️</span>
             Settings
           </button>
