@@ -1,0 +1,69 @@
+.heatmap-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+.heatmap-grid {
+  display: flex;
+  gap: 4px;
+}
+
+.heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background-color: var(--hover-bg); /* Default empty */
+  transition: all 0.2s ease;
+}
+
+.heatmap-cell.empty {
+  background-color: transparent;
+}
+
+/* GitHub-style green intensity */
+.heatmap-cell.level-0 {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .heatmap-cell.level-0 {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.heatmap-cell.level-1 { background-color: #0e4429; }
+.heatmap-cell.level-2 { background-color: #006d32; }
+.heatmap-cell.level-3 { background-color: #26a641; }
+.heatmap-cell.level-4 { background-color: #39d353; }
+
+/* Light theme overrides for greens (optional, but good for visibility) */
+[data-theme="light"] .heatmap-cell.level-1 { background-color: #9be9a8; }
+[data-theme="light"] .heatmap-cell.level-2 { background-color: #40c463; }
+[data-theme="light"] .heatmap-cell.level-3 { background-color: #30a14e; }
+[data-theme="light"] .heatmap-cell.level-4 { background-color: #216e39; }
+
+.heatmap-cell:hover:not(.empty) {
+  transform: scale(1.2);
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.heatmap-legend .heatmap-cell {
+  width: 10px;
+  height: 10px;
+}

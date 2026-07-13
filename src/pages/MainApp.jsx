@@ -45,8 +45,8 @@ const MainApp = () => {
       
       setDecks(decksWithCards);
 
-      // Fetch review logs & stats
-      const logs = await getReviewLogs(user.id, 7);
+      // Fetch review logs & stats (90 days for heatmap)
+      const logs = await getReviewLogs(user.id, 90);
       setReviewLogs(logs);
       setTotalStudied(logs.length);
 
@@ -164,6 +164,7 @@ const MainApp = () => {
           streak={userProfile?.current_streak || 0}
           totalStudied={totalStudied}
           dailyGoal={userProfile?.daily_goal || 20}
+          reviewLogs={reviewLogs}
           onNewDeck={() => { setEditingDeck(null); setIsEditorOpen(true); }}
           onEditDeck={(deck) => { setEditingDeck(deck); setIsEditorOpen(true); }}
           startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
