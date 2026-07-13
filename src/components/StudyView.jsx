@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Flashcard from './Flashcard';
+import { calculateNextIntervals, formatTime } from '../lib/anki';
 import './StudyView.css';
 
 const StudyView = ({ deck, dueCards, onRating, onFinish }) => {
@@ -35,6 +36,12 @@ const StudyView = ({ deck, dueCards, onRating, onFinish }) => {
   }
 
   const currentCard = dueCards[currentIndex];
+  
+  // Calculate dynamic intervals for the current card
+  let nextIntervals = null;
+  if (currentCard) {
+    nextIntervals = calculateNextIntervals(currentCard);
+  }
 
   const handleRatingClick = (rating) => {
     onRating(currentCard.id, rating);
@@ -74,19 +81,19 @@ const StudyView = ({ deck, dueCards, onRating, onFinish }) => {
         <div className="rating-buttons">
           <button className="rating-btn again" onClick={() => handleRatingClick('again')}>
             <span className="rating-label">Again</span>
-            <span className="rating-time">&lt; 1m</span>
+            <span className="rating-time">{formatTime(nextIntervals.again)}</span>
           </button>
           <button className="rating-btn hard" onClick={() => handleRatingClick('hard')}>
             <span className="rating-label">Hard</span>
-            <span className="rating-time">Days</span>
+            <span className="rating-time">{formatTime(nextIntervals.hard)}</span>
           </button>
           <button className="rating-btn good" onClick={() => handleRatingClick('good')}>
             <span className="rating-label">Good</span>
-            <span className="rating-time">Weeks</span>
+            <span className="rating-time">{formatTime(nextIntervals.good)}</span>
           </button>
           <button className="rating-btn easy" onClick={() => handleRatingClick('easy')}>
             <span className="rating-label">Easy</span>
-            <span className="rating-time">Months</span>
+            <span className="rating-time">{formatTime(nextIntervals.easy)}</span>
           </button>
         </div>
       ) : (

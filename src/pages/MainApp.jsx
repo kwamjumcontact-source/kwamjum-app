@@ -5,6 +5,7 @@ import Dashboard from '../components/Dashboard';
 import StudyView from '../components/StudyView';
 import StatsView from '../components/StatsView';
 import DeckEditorModal from '../components/DeckEditorModal';
+import { processReview } from '../lib/anki';
 import '../App.css'; // Inherited from prototype
 
 const MainApp = () => {
@@ -66,46 +67,16 @@ const MainApp = () => {
     fetchData();
   }, [user, currentDate]);
 
-  // SM-2 Algorithm Integration
+  // SM-2 Algorithm Integration (Anki Style)
   const handleRating = async (cardId, rating) => {
     const deck = decks.find(d => d.id === activeDeckId);
     const card = deck.cards.find(c => c.id === cardId);
     
-    let { repetitions = 0, ease = 2.5, interval = 0 } = card;
-    let qualityScore = 0;
-
-    switch(rating) {
-      case 'again': qualityScore = 0; break;
-      case 'hard': qualityScore = 3; break;
-      case 'good': qualityScore = 4; break;
-      case 'easy': qualityScore = 5; break;
-      default: qualityScore = 0;
-    }
-
-    // Rule 1: Correct answers
-    if (qualityScore >= 3) {
-      if (repetitions === 0) {
-        interval = 1;
-      } else if (repetitions === 1) {
-        interval = 6;
-      } else {
-        interval = Math.round(interval * ease);
-      }
-      repetitions += 1;
-    } 
-    // Rule 2: Incorrect answers
-    else {
-      repetitions = 0;
-      interval = 1;
-    }
-
-    // Rule 3: Update ease_factor
-    ease = ease + (0.1 - (5 - qualityScore) * (0.08 + (5 - qualityScore) * 0.02));
-    if (ease < 1.3) {
-      ease = 1.3;
-    }
+    // Process new state using Anki logic
+    const { repetitions, ease, interval } = processReview(card, rating);
 
     // Calculate new due date based on simulated currentDate
+    // interval is returned in DAYS from processReview
     const newDueDate = new Date(currentDate.getTime() + interval * 24 * 60 * 60 * 1000);
 
     // Save to Supabase
