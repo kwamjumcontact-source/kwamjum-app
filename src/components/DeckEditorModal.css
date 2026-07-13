@@ -1,0 +1,296 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: var(--bg-color);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: white;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-block h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: var(--accent-color);
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.color-picker {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.color-picker input[type="color"] {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: none;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cards-preview-list {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.mini-card {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mini-card:last-child {
+  border-bottom: none;
+}
+
+.card-idx {
+  background: rgba(255, 255, 255, 0.1);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+.card-snippet {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+
+.image-badge {
+  font-size: 12px;
+}
+
+.remove-card-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.remove-card-btn:hover {
+  opacity: 1;
+}
+
+.empty-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-align: center;
+  padding: 10px;
+}
+
+.add-card-box {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.type-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.type-selector button {
+  flex: 1;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.type-selector button.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border-color: #3b82f6;
+}
+
+.image-upload-area {
+  margin: 15px 0;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.upload-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.image-preview-box {
+  margin-top: 10px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.preview-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.image-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.remove-img-btn {
+  background: none;
+  border: none;
+  color: var(--danger-color);
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.add-card-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--card-bg);
+  border: 1px dashed var(--accent-color);
+  color: var(--accent-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.add-card-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.modal-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.save-deck-btn {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.save-deck-btn:hover {
+  filter: brightness(1.1);
+}

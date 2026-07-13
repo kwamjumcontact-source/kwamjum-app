@@ -1,0 +1,123 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  position: relative;
+}
+
+.study-header-bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: color 0.2s, background-color 0.2s;
+  font-family: inherit;
+}
+
+.back-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.flashcard-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 20px 0;
+  perspective: 1000px;
+}
+
+.controls-section {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding-bottom: 30px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.controls-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.control-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  flex: 1;
+  transition: transform 0.1s, filter 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:active {
+  transform: scale(0.95);
+}
+
+.btn-again { background-color: var(--danger-color); }
+.btn-hard { background-color: var(--warning-color); }
+.btn-good { background-color: var(--accent-color); }
+.btn-easy { background-color: var(--success-color); }
+
+.control-btn:hover {
+  filter: brightness(1.1);
+}
+
+.completion-message {
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.completion-message h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: var(--success-color);
+}
+
+.completion-message p {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.reset-btn {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.reset-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}

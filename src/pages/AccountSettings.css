@@ -1,0 +1,162 @@
+.account-page {
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #f8fafc;
+  min-height: 100vh;
+}
+
+.account-header-nav {
+  margin-bottom: 20px;
+}
+
+.account-page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.account-card {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.account-section {
+  padding: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.account-section:last-child {
+  border-bottom: none;
+}
+
+.avatar-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.avatar-content {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.current-avatar {
+  width: 100px;
+  height: 100px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  flex-shrink: 0;
+}
+
+.avatar-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.avatar-option {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.avatar-option:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.avatar-option.selected {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.info-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.edit-btn {
+  background: transparent;
+  border: none;
+  color: #c4b5fd;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edit-btn:hover:not(:disabled) {
+  text-decoration: underline;
+  color: #a78bfa;
+}
+
+.edit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-input-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-input {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: inherit;
+}
+
+.save-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
