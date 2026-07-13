@@ -166,8 +166,7 @@ export const getProfile = async (userId) => {
 export const updateProfile = async (userId, updates) => {
   const { data, error } = await supabase
     .from('profiles')
-    .update(updates)
-    .eq('id', userId)
+    .upsert({ id: userId, ...updates })
     .select()
     .single();
     
@@ -183,10 +182,11 @@ export const updateStreak = async (userId) => {
       .eq('id', userId)
       .single();
 
-    if (profileError) {
-      if (profileError.code === 'PGRST116') return null; // No profile found, skip streak
+    if (profileError && profileError.code !== 'PGRST116') {
       throw profileError;
     }
+
+    const currentProfile = profile || { current_streak: 0, longest_streak: 0, last_activity_date: null };
 
     const now = new Date();
     const year = now.getFullYear();
@@ -194,9 +194,9 @@ export const updateStreak = async (userId) => {
     const day = String(now.getDate()).padStart(2, '0');
     const currentActivityDate = `${year}-${month}-${day}`;
 
-    let newCurrentStreak = profile.current_streak || 0;
-    let newLongestStreak = profile.longest_streak || 0;
-    const lastActivityDate = profile.last_activity_date;
+    let newCurrentStreak = currentProfile.current_streak || 0;
+    let newLongestStreak = currentProfile.longest_streak || 0;
+    const lastActivityDate = currentProfile.last_activity_date;
 
     if (!lastActivityDate) {
       newCurrentStreak = 1;
@@ -220,12 +220,12 @@ export const updateStreak = async (userId) => {
 
     const { data: updatedProfile, error: updateError } = await supabase
       .from('profiles')
-      .update({
+      .upsert({
+        id: userId,
         current_streak: newCurrentStreak,
         longest_streak: newLongestStreak,
         last_activity_date: currentActivityDate,
       })
-      .eq('id', userId)
       .select()
       .single();
 
