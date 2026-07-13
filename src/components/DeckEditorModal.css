@@ -149,15 +149,21 @@ input[type="text"]:focus {
 }
 
 .remove-card-btn {
-  background: none;
-  border: none;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
   cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.2s;
+  opacity: 0.8;
+  transition: all 0.2s;
+  font-size: 14px;
 }
 
 .remove-card-btn:hover {
   opacity: 1;
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.05);
 }
 
 .empty-text {
@@ -293,4 +299,20 @@ input[type="text"]:focus {
 
 .save-deck-btn:hover {
   filter: brightness(1.1);
+}
+
+.delete-deck-btn {
+  padding: 10px 20px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-deck-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.05);
 }

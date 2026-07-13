@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './DeckEditorModal.css';
 
-const DeckEditorModal = ({ onClose, onSave, initialDeck = null }) => {
+const DeckEditorModal = ({ onClose, onSave, onDelete, initialDeck = null }) => {
   const isEditMode = !!initialDeck;
   
   const [title, setTitle] = useState(initialDeck?.title || '');
@@ -177,9 +177,16 @@ const DeckEditorModal = ({ onClose, onSave, initialDeck = null }) => {
           </div>
         </div>
         
-        <div className="modal-footer">
-          <button className="cancel-btn" onClick={onClose}>Cancel</button>
-          <button className="save-deck-btn" onClick={handleSave}>Save Deck</button>
+        <div className="modal-footer" style={{ display: 'flex', justifyContent: isEditMode ? 'space-between' : 'flex-end', width: '100%' }}>
+          {isEditMode && (
+            <button className="delete-deck-btn" onClick={() => onDelete(initialDeck.id)}>
+              Delete Deck
+            </button>
+          )}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className="cancel-btn" onClick={onClose}>Cancel</button>
+            <button className="save-deck-btn" onClick={handleSave}>Save Deck</button>
+          </div>
         </div>
       </div>
     </div>

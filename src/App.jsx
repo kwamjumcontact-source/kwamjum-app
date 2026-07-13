@@ -6,6 +6,7 @@ import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 import MainApp from './pages/MainApp';
 import AccountSettings from './pages/AccountSettings';
+import HelpFeedback from './pages/HelpFeedback';
 import './App.css';
 
 // Temporary Dashboard for testing authentication
@@ -46,6 +47,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AccountSettings />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/help" 
+            element={
+              <ProtectedRoute>
+                <HelpFeedback />
               </ProtectedRoute>
             } 
           />

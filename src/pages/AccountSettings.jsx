@@ -7,7 +7,7 @@ import './AccountSettings.css';
 const AVATARS = ['🐶', '🐱', '🐼', '🦊', '🐧', '🐨', '🐯', '🦁', '🐵', '🐸', '🦄', '🐙'];
 
 const AccountSettings = () => {
-  const { user } = useAuth();
+  const { user, updateProfileContext } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState({ 
     username: '', 
@@ -56,12 +56,16 @@ const AccountSettings = () => {
   };
 
   const handleAvatarSelect = async (emoji) => {
-    setProfile({ ...profile, avatar: emoji });
+    const updated = { ...profile, avatar: emoji };
+    setProfile(updated);
+    updateProfileContext(updated);
     await updateProfile(user.id, { avatar: emoji });
   };
 
   const handleSaveUsername = async () => {
-    setProfile({ ...profile, username: newUsername });
+    const updated = { ...profile, username: newUsername };
+    setProfile(updated);
+    updateProfileContext(updated);
     setIsEditingUsername(false);
     await updateProfile(user.id, { username: newUsername });
   };
@@ -79,6 +83,16 @@ const AccountSettings = () => {
     setIsSaving(true);
     try {
       await updateProfile(user.id, {
+        daily_goal: profile.daily_goal,
+        max_reviews_per_day: profile.max_reviews_per_day,
+        max_interval_days: profile.max_interval_days,
+        ui_theme: profile.ui_theme,
+        font_size: profile.font_size,
+        auto_flip_seconds: profile.auto_flip_seconds
+      });
+      // Update global context so other parts of the UI update instantly
+      updateProfileContext({
+        ...profile,
         daily_goal: profile.daily_goal,
         max_reviews_per_day: profile.max_reviews_per_day,
         max_interval_days: profile.max_interval_days,

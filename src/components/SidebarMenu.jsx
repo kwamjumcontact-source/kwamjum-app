@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import './SidebarMenu.css';
 
 const SidebarMenu = ({ isOpen, onClose }) => {
-  const [theme, setTheme] = useState(localStorage.getItem('kwamjum_theme') || 'dark');
-  const { user, signOut } = useAuth();
+  const { user, userProfile, signOut } = useAuth();
+  const [theme, setTheme] = useState(userProfile?.ui_theme || localStorage.getItem('kwamjum_theme') || 'dark');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const SidebarMenu = ({ isOpen, onClose }) => {
             <span className="icon">ℹ️</span>
             Info
           </button>
-          <button className="menu-item" onClick={() => handleItemClick('Help and Feedback')}>
+          <button className="menu-item" onClick={() => { onClose(); navigate('/help'); }}>
             <span className="icon">❓</span>
             Help and Feedback
           </button>
@@ -63,9 +63,9 @@ const SidebarMenu = ({ isOpen, onClose }) => {
         
         <div className="sidebar-account-section">
           <div className="account-info" onClick={goToAccount} style={{ cursor: 'pointer' }} title="Go to Account Settings">
-            <span className="icon">👤</span>
+            <span className="icon" style={{ fontSize: '24px' }}>{userProfile?.avatar || '👤'}</span>
             <div className="account-details">
-              <span className="account-title">Account</span>
+              <span className="account-title">{userProfile?.username || 'Account'}</span>
               <span className="account-email">{user?.email}</span>
             </div>
           </div>
