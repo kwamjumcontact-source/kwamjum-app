@@ -4,7 +4,7 @@ import './MascotAssistant.css';
 // We will fetch the large dictionary dynamically to avoid bundling a 5MB JSON file.
 let cachedDictionary = null;
 
-const MascotAssistant = ({ currentView, streak, totalStudied }) => {
+const MascotAssistant = ({ currentView, streak, totalStudied, userName, decks, startStudy }) => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [chatMode, setChatMode] = useState(false);
   const [message, setMessage] = useState('');
@@ -37,25 +37,52 @@ const MascotAssistant = ({ currentView, streak, totalStudied }) => {
         setShowBubble(true);
       }, 300);
     }
-  }, [currentView, streak, chatMode]);
+    // Random periodic messages (every 1 min)
+    const interval = setInterval(() => {
+      if (chatMode) return;
+      
+      const randomMessages = [
+        `สู้ๆ นะ ${userName}! พักสายตาบ้างล่ะ 👀`,
+        `คุณมี Streak ติดต่อกัน ${streak} วันแล้ว เจ๋งมาก! 🔥`,
+        `วันนี้คุณเรียนไป ${totalStudied} การ์ดแล้วนะ เก่งสุดๆ! 🚀`,
+        `มีศัพท์คำไหนไม่เข้าใจ กดปุ่ม T หรือคลิกที่ตัวผมเพื่อถามได้เลยนะ! 🤓`,
+        `แวะมาทักทายครับ ${userName}! ขอให้เป็นวันที่ดีนะ 🌟`,
+        `ลืมอะไรไปรึเปล่า? ทบทวนศัพท์บ่อยๆ จะทำให้จำแม่นขึ้นนะ! 🧠`
+      ];
+      
+      const randomIndex = Math.floor(Math.random() * randomMessages.length);
+      setMessage(randomMessages[randomIndex]);
+      setShowBubble(true);
+      
+      // Auto hide bubble after 10 seconds if not clicked
+      setTimeout(() => setShowBubble(false), 10000);
+    }, 60000); // 1 minute
+
+    return () => clearInterval(interval);
+  }, [currentView, chatMode, streak, totalStudied, userName]);
 
   const handleMascotClick = () => {
     if (isMinimized) {
       setIsMinimized(false);
       setShowBubble(true);
     } else {
-      // Toggle chat mode instead of minimizing immediately
+      setChatMode(!chatMode);
       if (!chatMode) {
-        setChatMode(true);
-        setMessage("พิมพ์คำศัพท์ภาษาอังกฤษที่อยากให้แปลได้เลยครับ!");
-        setShowBubble(true);
-        setTimeout(() => {
-          if(inputRef.current) inputRef.current.focus();
-        }, 100);
+        setMessage('สวัสดีครับ มีคำศัพท์อะไรอยากให้ผมแปล พิมพ์บอกได้เลย! 🤖');
       } else {
-        setChatMode(false);
-        setIsMinimized(true);
+        setMessage('กลับมาสู่โหมดปกติแล้วครับ! ทบทวนศัพท์ต่อได้เลย 📚');
       }
+    }
+  };
+
+  const handleStudyFirstDeck = (e) => {
+    e.stopPropagation(); // Prevent opening chat
+    if (decks && decks.length > 0) {
+      startStudy(decks[0].id);
+      setMessage('เริ่มลุยเรียนการ์ดกองแรกกันเลย! 🚀');
+    } else {
+      setMessage('ยังไม่มี Deck เลยครับ ลองสร้างดูก่อนนะ! 📝');
+      setTimeout(() => setShowBubble(false), 4000);
     }
   };
 
@@ -158,14 +185,30 @@ const MascotAssistant = ({ currentView, streak, totalStudied }) => {
         </div>
       )}
       
-      <div 
-        className="mascot-character" 
-        onClick={handleMascotClick} 
-        title={isMinimized ? "Click to wake up!" : "Click to chat or minimize"}
-      >
-        <img src="/mascot.jpg" alt="Assistant Mascot" className="mascot-img" />
-        {isMinimized && <div className="mascot-badge">!</div>}
-      </div>
+      <div className="mascot-character" onClick={handleMascotClick}>
+          <img src="/mascot.jpg" alt="Mascot" className="mascot-img" />
+          {streak > 3 && <div className="mascot-badge">🔥</div>}
+          
+          {/* Radial Menu */}
+          {!isMinimized && (
+            <div className="radial-menu">
+              <button 
+                className="radial-btn btn-translate" 
+                onClick={(e) => { e.stopPropagation(); setChatMode(true); setMessage('พิมพ์คำศัพท์ที่อยากให้ผมแปลได้เลยครับ! 🤖'); }}
+                title="Translate"
+              >
+                T
+              </button>
+              <button 
+                className="radial-btn btn-study" 
+                onClick={handleStudyFirstDeck}
+                title="Study First Deck"
+              >
+                S
+              </button>
+            </div>
+          )}
+        </div>
     </div>
   );
 };

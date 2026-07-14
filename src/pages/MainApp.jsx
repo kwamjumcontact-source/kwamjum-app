@@ -204,7 +204,10 @@ const MainApp = () => {
       <MascotAssistant 
         currentView={currentView} 
         streak={userProfile?.current_streak || 0} 
-        totalStudied={totalStudied} 
+        totalStudied={totalStudied}
+        userName={user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'My Friend'}
+        decks={decks}
+        startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
       />
     </div>
   );
