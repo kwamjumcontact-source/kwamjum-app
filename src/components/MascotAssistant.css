@@ -23,7 +23,7 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  background: #ffffff;
+  background: #000;
 }
 
 .mascot-character:hover {
@@ -34,6 +34,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1.4) translateY(10%);
 }
 
 .speech-bubble {
