@@ -5,6 +5,7 @@ import Dashboard from '../components/Dashboard';
 import StudyView from '../components/StudyView';
 import StatsView from '../components/StatsView';
 import DeckEditorModal from '../components/DeckEditorModal';
+import MascotAssistant from '../components/MascotAssistant';
 import { processReview } from '../lib/anki';
 import '../App.css'; // Inherited from prototype
 
@@ -199,6 +200,12 @@ const MainApp = () => {
           onDelete={handleDeleteDeck}
         />
       )}
+
+      <MascotAssistant 
+        currentView={currentView} 
+        streak={userProfile?.current_streak || 0} 
+        totalStudied={totalStudied} 
+      />
     </div>
   );
 };

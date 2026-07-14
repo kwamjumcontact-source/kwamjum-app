@@ -1,0 +1,140 @@
+.mascot-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none; /* Let clicks pass through container */
+}
+
+.mascot-container > * {
+  pointer-events: auto; /* Re-enable clicks for children */
+}
+
+.mascot-character {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  background: #000;
+}
+
+.mascot-character:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.mascot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.speech-bubble {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  max-width: 250px;
+  font-size: 0.95rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  position: relative;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform-origin: bottom right;
+}
+
+/* Tail of the speech bubble */
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  right: 30px;
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: var(--card-bg) transparent transparent transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+}
+
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  right: 28px;
+  border-width: 12px 12px 0;
+  border-style: solid;
+  border-color: var(--border-color) transparent transparent transparent;
+  display: block;
+  width: 0;
+}
+
+.close-bubble {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-bubble:hover {
+  color: var(--text-primary);
+}
+
+.minimized .mascot-character {
+  transform: scale(0.7) translateY(20px);
+  opacity: 0.7;
+}
+
+.minimized .mascot-character:hover {
+  transform: scale(0.8) translateY(20px);
+  opacity: 1;
+}
+
+.mascot-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .mascot-container {
+    bottom: 80px; /* Above mobile navigation */
+    right: 15px;
+  }
+  .mascot-character {
+    width: 60px;
+    height: 60px;
+  }
+  .speech-bubble {
+    max-width: 200px;
+    font-size: 0.85rem;
+  }
+}

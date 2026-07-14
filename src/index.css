@@ -1,16 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Josefin+Sans:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
   --bg-color: #050505; /* Pitch black */
   --text-primary: #e2e8f0;
   --text-secondary: #64748b;
   --card-bg: #111113; /* Solid dark grey */
+  --font-main: 'Libre Baskerville', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-header: 'Josefin Sans', sans-serif;
   --accent-color: #06b6d4; /* Cyber Cyan */
   --success-color: #10b981; /* Terminal Green */
   --warning-color: #eab308;
   --danger-color: #ef4444;
-  --font-main: 'Inter', monospace;
-  --font-mono: 'Fira Code', 'Courier New', monospace;
   --border-color: #27272a;
   --hover-bg: #18181b;
   --input-bg: #09090b;
@@ -53,6 +54,10 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-header);
 }
 
 #root {
