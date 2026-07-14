@@ -28,6 +28,7 @@
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   background: #000;
+  z-index: 2; /* keep above radial menu */
 }
 
 .mascot-character:hover {
@@ -196,244 +197,55 @@
   opacity: 0.9;
 }
 
+/* Half Circle Menu */
 .radial-menu {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Let hover pass through to the character */
-}
-
-.radial-btn {
-  position: absolute;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--primary-color);
-  color: white;
+  top: -20px;
+  left: -50px;
+  width: 60px;
+  height: 120px;
+  background: rgba(10, 10, 15, 0.95);
   border: 2px solid var(--border-color);
-  font-weight: bold;
+  border-right: none;
+  border-top-left-radius: 60px;
+  border-bottom-left-radius: 60px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  pointer-events: auto;
+  justify-content: space-evenly;
+  padding: 10px 10px 10px 0;
+  z-index: 1; /* Below the mascot */
   opacity: 0;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  background: #000;
-}
-
-.mascot-character:hover {
-  transform: scale(1.1) rotate(5deg);
-}
-
-.mascot-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  transform: scale(1.1);
-}
-
-.speech-bubble {
-  background: var(--card-bg);
-  border: 2px solid var(--border-color);
-  color: var(--text-primary);
-  padding: 15px 20px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  max-width: 250px;
-  font-size: 0.95rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-  position: relative;
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  transform-origin: bottom right;
-}
-
-/* Tail of the speech bubble */
-.speech-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  right: 30px;
-  border-width: 10px 10px 0;
-  border-style: solid;
-  border-color: var(--card-bg) transparent transparent transparent;
-  display: block;
-  width: 0;
-  z-index: 1;
-}
-
-.speech-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: -13px;
-  right: 28px;
-  border-width: 12px 12px 0;
-  border-style: solid;
-  border-color: var(--border-color) transparent transparent transparent;
-  display: block;
-  width: 0;
-}
-
-.close-bubble {
-  position: absolute;
-  top: 5px;
-  right: 8px;
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 1.2rem;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.close-bubble:hover {
-  color: var(--text-primary);
-}
-
-.minimized .mascot-character {
-  transform: scale(0.7) translateY(20px);
-  opacity: 0.7;
-}
-
-.minimized .mascot-character:hover {
-  transform: scale(0.8) translateY(20px);
-  opacity: 1;
-}
-
-.mascot-badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: #ef4444;
-  color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-@keyframes popIn {
-  0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-@media (max-width: 768px) {
-  .mascot-container {
-    bottom: 80px; /* Above mobile navigation */
-    right: 15px;
-  }
-  .mascot-character {
-    width: 60px;
-    height: 60px;
-  }
-  .speech-bubble {
-    max-width: 200px;
-    font-size: 0.85rem;
-  }
-}
-
-.chat-mode-bubble {
-  min-width: 250px;
-}
-.dict-result strong {
-  font-size: 1.1rem;
-  color: var(--accent-color);
-}
-.dict-result .pos {
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  margin-left: 5px;
-}
-.dict-result .meaning {
-  margin: 8px 0;
-  font-weight: bold;
-}
-.dict-result .example {
-  font-style: italic;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-}
-.mascot-chat-form {
-  display: flex;
-  margin-top: 15px;
-  gap: 8px;
-}
-.mascot-input {
-  flex: 1;
-  background: var(--input-bg);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  padding: 8px 12px;
-  border-radius: 4px;
-  outline: none;
-}
-.mascot-input:focus {
-  border-color: var(--accent-color);
-}
-.mascot-submit {
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  padding: 0 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-.mascot-submit:hover {
-  opacity: 0.9;
-}
-
-.radial-menu {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Let hover pass through to the character */
-}
-
-.radial-btn {
-  position: absolute;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--primary-color);
-  color: white;
-  border: 2px solid var(--border-color);
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  pointer-events: auto;
-  opacity: 0;
-  transform: scale(0);
+  transform: scale(0.5) translateX(30px);
+  transform-origin: right center;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  pointer-events: auto; /* Catch hover so it doesn't disappear */
+  box-shadow: -5px 0 15px rgba(0,0,0,0.5);
 }
 
-.mascot-wrapper:hover .btn-translate {
+.mascot-wrapper:hover .radial-menu {
   opacity: 1;
-  transform: translate(-45px, -15px) scale(1); /* Top Left */
+  transform: scale(1) translateX(0);
 }
 
-.mascot-wrapper:hover .btn-study {
-  opacity: 1;
-  transform: translate(-45px, 45px) scale(1); /* Bottom Left */
+.radial-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  border: 2px solid var(--border-color);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .radial-btn:hover {
   background: var(--accent-color);
-  
+  transform: scale(1.1);
+  border-color: var(--accent-color);
 }
-
-.mascot-wrapper:hover .btn-translate:hover { transform: translate(-45px, -15px) scale(1.1); }
-.mascot-wrapper:hover .btn-study:hover { transform: translate(-45px, 45px) scale(1.1); }
