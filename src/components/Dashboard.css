@@ -620,3 +620,7 @@
 .stats-gamification-wrapper .stats-gamification-grid {
   margin-bottom: 0;
 }
+
+.stats-gamification-wrapper .gamification-card {
+  background: var(--bg-color);
+}
