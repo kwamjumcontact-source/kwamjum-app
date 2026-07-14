@@ -185,30 +185,32 @@ const MascotAssistant = ({ currentView, streak, totalStudied, userName, decks, s
         </div>
       )}
       
-      <div className="mascot-character" onClick={handleMascotClick}>
+      <div className="mascot-wrapper">
+        <div className="mascot-character" onClick={handleMascotClick}>
           <img src="/mascot.jpg" alt="Mascot" className="mascot-img" />
           {streak > 3 && <div className="mascot-badge">🔥</div>}
-          
-          {/* Radial Menu */}
-          {!isMinimized && (
-            <div className="radial-menu">
-              <button 
-                className="radial-btn btn-translate" 
-                onClick={(e) => { e.stopPropagation(); setChatMode(true); setMessage('พิมพ์คำศัพท์ที่อยากให้ผมแปลได้เลยครับ! 🤖'); }}
-                title="Translate"
-              >
-                T
-              </button>
-              <button 
-                className="radial-btn btn-study" 
-                onClick={handleStudyFirstDeck}
-                title="Study First Deck"
-              >
-                S
-              </button>
-            </div>
-          )}
         </div>
+          
+        {/* Radial Menu */}
+        {!isMinimized && (
+          <div className="radial-menu">
+            <button 
+              className="radial-btn btn-translate" 
+              onClick={(e) => { e.stopPropagation(); setChatMode(true); setMessage('พิมพ์คำศัพท์ที่อยากให้ผมแปลได้เลยครับ! 🤖'); }}
+              title="Translate"
+            >
+              T
+            </button>
+            <button 
+              className="radial-btn btn-study" 
+              onClick={handleStudyFirstDeck}
+              title="Study First Deck"
+            >
+              S
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
