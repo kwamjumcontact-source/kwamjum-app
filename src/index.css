@@ -14,7 +14,7 @@
   --border-color: #27272a;
   --hover-bg: #18181b;
   --input-bg: #09090b;
-  --ui-border: 1px;
+  --ui-border: 2px;
 }
 
 [data-theme="light"] {
@@ -26,7 +26,6 @@
   --hover-bg: #cbd5e1;
   --input-bg: #ffffff;
   --accent-color: #0284c7; 
-  --ui-border: 2px; /* Thicker borders for light mode */
 }
 
 [data-font-size="small"] {
