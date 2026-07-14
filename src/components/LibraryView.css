@@ -142,12 +142,10 @@
   gap: 25px;
 }
 
-.deck-card {
+.deck-card.radical {
   background: var(--card-bg);
-  border-radius: 4px;
-  padding: 24px;
+  border-radius: 6px;
   border: 1px solid var(--border-color);
-  border-top: 4px solid var(--deck-color, var(--primary-color));
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
@@ -155,68 +153,107 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   position: relative;
   overflow: hidden;
+  height: 220px;
+  padding: 0;
 }
 
-.deck-card:hover {
+[data-theme="dark"] .deck-card.radical {
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.deck-card.radical:hover {
   transform: translateY(-4px);
   border-color: var(--border-color);
-  border-top-color: var(--deck-color, var(--primary-color));
-  box-shadow: 0 12px 24px rgba(0,0,0,0.1), 0 4px 20px color-mix(in srgb, var(--deck-color, var(--primary-color)) 20%, transparent);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1), 0 4px 20px color-mix(in srgb, var(--deck-color, var(--primary-color)) 25%, transparent);
 }
 
-.deck-card-header {
+.deck-card-cover {
+  height: 90px;
+  background: var(--deck-color, var(--primary-color));
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-bottom: 15px;
-  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
-.deck-card-header h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--text-primary);
+.cover-icon {
+  color: #FFFFFF;
+  opacity: 0.25;
 }
 
-.edit-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-secondary);
-  opacity: 0; /* Hidden until hover */
-  transition: all 0.2s;
-  padding: 6px;
-  border-radius: 4px;
+.deck-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.deck-card.radical:hover .deck-actions {
+  opacity: 1;
+}
+
+.action-circle {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.edit-btn:hover {
-  background: var(--hover-bg);
+.action-circle:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+  color: #FFFFFF !important;
+}
+
+.deck-card-content {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.deck-title {
+  margin: 0 0 6px 0;
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--text-primary);
-  opacity: 1 !important;
-}
-
-.deck-card:hover .edit-btn {
-  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .deck-description {
   color: var(--text-secondary);
   font-size: 0.9rem;
   line-height: 1.5;
-  flex-grow: 1;
-  margin-bottom: 20px;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .deck-stats {
+  margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.85rem;
   color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
 }
 
 .due-badge {

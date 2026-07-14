@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Books, PencilSimple, Plus, UploadSimple, DownloadSimple } from '@phosphor-icons/react';
+import { Books, PencilSimple, Plus, UploadSimple, DownloadSimple, Stack } from '@phosphor-icons/react';
 import './LibraryView.css';
 
 const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy, onExportDeck, onImportDeck }) => {
@@ -79,26 +79,31 @@ const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy, onExportDeck, o
               <h2 className="category-title">{category}</h2>
               <div className="decks-grid">
                 {categories[category].map(deck => (
-                  <div key={deck.id} className="deck-card" style={{ '--deck-color': deck.color || 'var(--primary-color)' }} onClick={() => startStudy(deck.id)}>
-                    <div className="deck-card-header">
-                      <h3>{deck.title}</h3>
-                      <div className="deck-actions" style={{ display: 'flex', gap: '5px' }}>
-                        <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onExportDeck && onExportDeck(deck.id); }} title="Export Deck">
-                          <DownloadSimple size={20} />
+                  <div key={deck.id} className="deck-card radical" style={{ '--deck-color': deck.color || 'var(--primary-color)' }} onClick={() => startStudy(deck.id)}>
+                    <div className="deck-card-cover">
+                      <div className="cover-icon">
+                        <Stack size={48} weight="duotone" />
+                      </div>
+                      <div className="deck-actions">
+                        <button className="edit-btn action-circle" onClick={(e) => { e.stopPropagation(); onExportDeck && onExportDeck(deck.id); }} title="Export Deck">
+                          <DownloadSimple size={18} />
                         </button>
-                        <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }} title="Edit Deck">
-                          <PencilSimple size={20} />
+                        <button className="edit-btn action-circle" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }} title="Edit Deck">
+                          <PencilSimple size={18} />
                         </button>
                       </div>
                     </div>
-                    <p className="deck-description">{deck.description || "No description"}</p>
-                    <div className="deck-stats">
-                      <span>{deck.cards?.length || 0} cards</span>
-                      {deck.dueToday > 0 ? (
-                        <span className="due-badge">{deck.dueToday} due today</span>
-                      ) : (
-                        <span className="up-to-date-badge">Up to date</span>
-                      )}
+                    <div className="deck-card-content">
+                      <h3 className="deck-title">{deck.title}</h3>
+                      <p className="deck-description">{deck.description || "No description provided."}</p>
+                      <div className="deck-stats">
+                        <span className="card-count">{deck.cards?.length || 0} cards</span>
+                        {deck.dueToday > 0 ? (
+                          <span className="due-badge">{deck.dueToday} due today</span>
+                        ) : (
+                          <span className="up-to-date-badge">Up to date</span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
