@@ -23,7 +23,7 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  background: #000;
+  background: #ffffff;
 }
 
 .mascot-character:hover {
