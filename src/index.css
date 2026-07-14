@@ -1,18 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
-  /* Light Mode (Default) - Clean, Minimal SaaS */
+  /* Light Mode (Default) - Formal Corporate */
   --bg-color: #F8FAFC; 
   --text-primary: #0F172A;
   --text-secondary: #475569;
   --card-bg: #FFFFFF;
-  --font-main: 'Plus Jakarta Sans', sans-serif;
+  --font-main: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-header: 'Plus Jakarta Sans', sans-serif;
+  --font-header: 'Inter', sans-serif;
   
-  --primary-color: #0D9488;
-  --primary-hover: #0F766E;
-  --accent-color: #0D9488; /* Keep old variable name for compatibility */
+  --primary-color: #1E40AF; /* Blue-800 */
+  --primary-hover: #1E3A8A; /* Blue-900 */
+  --accent-color: #1E40AF; 
   
   --success-color: #059669;
   --warning-color: #D97706;
@@ -24,7 +25,7 @@
 }
 
 [data-theme="dark"] {
-  /* Dark Mode - Deep Slate, Modern Sleek */
+  /* Dark Mode - Formal Slate */
   --bg-color: #0F172A; 
   --text-primary: #F8FAFC;
   --text-secondary: #94A3B8;
@@ -32,9 +33,9 @@
   --border-color: #334155; 
   --hover-bg: #0F172A;
   --input-bg: #0F172A;
-  --accent-color: #2DD4BF; 
-  --primary-color: #2DD4BF;
-  --primary-hover: #14B8A6;
+  --primary-color: #3B82F6; /* Blue-500 */
+  --primary-hover: #2563EB; /* Blue-600 */
+  --accent-color: #3B82F6; 
 }
 
 [data-font-size="small"] {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Flashcard from './Flashcard';
 import { calculateNextIntervals, formatTime, processReview } from '../lib/anki';
-import { Confetti, HourglassHigh, FastForward } from '@phosphor-icons/react';
+import { CheckCircle, HourglassHigh, FastForward } from '@phosphor-icons/react';
 import './StudyView.css';
 
 const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRating, onFinish }) => {
@@ -99,7 +99,7 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
     return (
       <div className="study-view-container empty-state">
         <div className="completion-card">
-          <Confetti size={64} weight="duotone" color="var(--primary-color)" style={{ marginBottom: '16px' }} />
+          <CheckCircle size={64} weight="duotone" color="var(--primary-color)" style={{ marginBottom: '16px' }} />
           <h2>You're all caught up!</h2>
           <p>No more cards due for <strong>{deck.title}</strong> right now.</p>
           <button className="finish-btn" onClick={handleFinish}>Return to Dashboard</button>
@@ -113,7 +113,7 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
     return (
       <div className="study-view-container finished-state">
         <div className="completion-card">
-          <Confetti size={64} weight="duotone" color="var(--success-color)" style={{ marginBottom: '16px' }} />
+          <CheckCircle size={64} weight="duotone" color="var(--success-color)" style={{ marginBottom: '16px' }} />
           <h2>Session Complete!</h2>
           <p>Great job studying <strong>{deck.title}</strong>.</p>
           <p>You have graduated all cards for today.</p>

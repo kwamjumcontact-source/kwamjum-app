@@ -7,7 +7,7 @@ import Sidebar from '../components/Sidebar';
 import StudyView from '../components/StudyView';
 import StatsView from '../components/StatsView';
 import DeckEditorModal from '../components/DeckEditorModal';
-import MascotAssistant from '../components/MascotAssistant';
+import DictionaryTool from '../components/DictionaryTool';
 import { processReview } from '../lib/anki';
 import '../App.css'; // Inherited from prototype
 
@@ -298,14 +298,7 @@ const MainApp = () => {
         />
       )}
 
-      <MascotAssistant 
-        currentView={currentView} 
-        streak={userProfile?.current_streak || 0} 
-        totalStudied={totalStudied}
-        userName={user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'My Friend'}
-        decks={decks}
-        startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
-      />
+      <DictionaryTool />
       
         </div> {/* End main-content-area */}
       </div> {/* End flex row */}

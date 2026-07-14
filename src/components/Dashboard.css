@@ -48,7 +48,7 @@
 .cta-card {
   background: var(--card-bg);
   border: 1px solid var(--primary-color);
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 40px;
   position: relative;
   overflow: hidden;
@@ -95,7 +95,7 @@
   padding: 16px 40px;
   font-size: 1.1rem;
   font-weight: 600;
-  border-radius: 50px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
@@ -362,7 +362,7 @@
   justify-content: center;
   gap: 5px;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: 4px;
   background: var(--input-bg);
   border: var(--ui-border) solid var(--border-color);
   text-align: center;
@@ -426,7 +426,7 @@
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 8px 15px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 14px;
   width: 200px;
   outline: none;
@@ -442,7 +442,7 @@
   color: white;
   border: none;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
