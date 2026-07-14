@@ -2,20 +2,26 @@ import React, { useMemo } from 'react';
 import './ActivityHeatmap.css';
 
 const ActivityHeatmap = ({ logs }) => {
-  const weeks = 12; // Show last 12 weeks (~84 days)
-  const daysInWeek = 7;
+  const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
-  // Generate matrix of dates for the heatmap
-  const heatmapData = useMemo(() => {
-    const data = [];
+  const { monthName, year, calendarGrid } = useMemo(() => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth(); // 0-11
+    
+    // First day of the month
+    const firstDayDate = new Date(currentYear, currentMonth, 1);
+    // getDay() is 0 (Sun) to 6 (Sat). We want Monday=0, Sunday=6
+    let startingDay = firstDayDate.getDay() - 1;
+    if (startingDay === -1) startingDay = 6; // Sunday
 
-    // Calculate the start date (12 weeks ago, starting on a Sunday)
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - (weeks * daysInWeek) + today.getDay() + 1);
+    // Total days in current month
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-    // Count reviews per date
+    // Map logs to counts per date string
     const reviewCounts = {};
     if (logs) {
       logs.forEach(log => {
@@ -24,67 +30,109 @@ const ActivityHeatmap = ({ logs }) => {
       });
     }
 
-    // Build the grid column by column (weeks)
-    for (let w = 0; w < weeks; w++) {
-      const weekCol = [];
-      for (let d = 0; d < daysInWeek; d++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + (w * daysInWeek) + d);
-        
-        if (currentDate > today) {
-          weekCol.push(null); // Future days
-          continue;
-        }
+    const grid = [];
+    let currentWeek = [];
 
-        const dateStr = currentDate.toISOString().split('T')[0];
-        const count = reviewCounts[dateStr] || 0;
-        
-        // Determine intensity level (0-4)
-        let intensity = 0;
-        let isGhost = false;
-
-        if (logs && logs.length > 0) {
-          if (count > 0) intensity = 1;
-          if (count >= 10) intensity = 2;
-          if (count >= 30) intensity = 3;
-          if (count >= 50) intensity = 4;
-        } else {
-          // Ghost pattern for empty states (a wave or random pattern)
-          isGhost = true;
-          // Simple visual pattern based on index
-          intensity = ((w + d) % 3 === 0) ? ((w % 2 === 0) ? 2 : 1) : 0;
-        }
-
-        weekCol.push({
-          date: dateStr,
-          count,
-          intensity,
-          isGhost
-        });
-      }
-      data.push(weekCol);
+    // Add empty cells for padding before the 1st of the month
+    for (let i = 0; i < startingDay; i++) {
+      currentWeek.push(null);
     }
-    return data;
+
+    // Add actual days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const cellDate = new Date(currentYear, currentMonth, d);
+      // Ensure local timezone doesn't mess up YYYY-MM-DD
+      const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const count = reviewCounts[dateStr] || 0;
+      
+      let intensity = 0;
+      let isGhost = false;
+      let isFuture = false;
+
+      // If no logs at all, show ghost pattern to encourage user
+      if (!logs || logs.length === 0) {
+        isGhost = true;
+        intensity = (d % 3 === 0) ? 1 : 0;
+      } else {
+        if (count > 0) intensity = 1;
+        if (count >= 10) intensity = 2;
+        if (count >= 30) intensity = 3;
+        if (count >= 50) intensity = 4;
+      }
+
+      // Mark future days to make them darker
+      if (cellDate > today && !isGhost) {
+        isFuture = true;
+      }
+
+      currentWeek.push({
+        day: d,
+        date: dateStr,
+        count,
+        intensity,
+        isGhost,
+        isFuture,
+        isToday: d === today.getDate()
+      });
+
+      if (currentWeek.length === 7) {
+        grid.push(currentWeek);
+        currentWeek = [];
+      }
+    }
+
+    // Pad the last week
+    if (currentWeek.length > 0) {
+      while (currentWeek.length < 7) {
+        currentWeek.push(null);
+      }
+      grid.push(currentWeek);
+    }
+
+    return {
+      monthName: monthNames[currentMonth],
+      year: currentYear,
+      calendarGrid: grid
+    };
   }, [logs]);
 
   return (
     <div className="heatmap-container">
-      <div className="heatmap-grid">
-        {heatmapData.map((week, wIndex) => (
-          <div key={wIndex} className="heatmap-col">
-            {week.map((day, dIndex) => {
-              if (!day) return <div key={dIndex} className="heatmap-cell empty" />;
-              return (
-                <div 
-                  key={dIndex} 
-                  className={`heatmap-cell level-${day.intensity} ${day.isGhost ? 'ghost' : ''}`}
-                  title={day.isGhost ? "Start studying to light up this day!" : `${day.count} reviews on ${day.date}`}
-                ></div>
-              );
-            })}
-          </div>
-        ))}
+      <div className="calendar-header">
+        <span className="calendar-title">{monthName} {year}</span>
       </div>
+      
+      <div className="calendar-grid">
+        {/* Days of week header */}
+        {daysOfWeek.map(day => (
+          <div key={day} className="calendar-dow">{day}</div>
+        ))}
+
+        {/* Calendar Cells */}
+        {calendarGrid.map((week, wIndex) => 
+          week.map((dayObj, dIndex) => {
+            if (!dayObj) {
+              return <div key={`${wIndex}-${dIndex}`} className="heatmap-cell empty-padding" />;
+            }
+            
+            let classNames = `heatmap-cell level-${dayObj.intensity}`;
+            if (dayObj.isGhost) classNames += ' ghost';
+            if (dayObj.isFuture) classNames += ' future';
+            if (dayObj.isToday) classNames += ' today';
+
+            return (
+              <div 
+                key={`${wIndex}-${dIndex}`} 
+                className={classNames}
+                title={dayObj.isGhost ? "Start studying!" : `${dayObj.count} reviews on ${dayObj.date}`}
+              >
+                {dayObj.day}
+              </div>
+            );
+          })
+        )}
+      </div>
+
       <div className="heatmap-legend">
         <span>Less</span>
         <div className="heatmap-cell level-0"></div>
