@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LandingPage from './pages/LandingPage';
 import Auth from './pages/Auth';
 import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -47,8 +48,8 @@ function App() {
             } 
           />
           
-          {/* Redirect root to dashboard (ProtectedRoute will handle redirecting to login if needed) */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* Public Landing Page */}
+          <Route path="/" element={<LandingPage />} />
         </Routes>
       </Router>
     </AuthProvider>

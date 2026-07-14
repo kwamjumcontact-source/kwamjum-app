@@ -46,13 +46,15 @@
 }
 
 .cta-card {
-  background: var(--card-bg);
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
+  background: color-mix(in srgb, var(--card-bg) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+  border-radius: 12px;
   padding: 40px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(13, 148, 136, 0.1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.05);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -71,10 +73,11 @@
 }
 
 .cta-title {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 800;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .highlight-text {
@@ -147,13 +150,16 @@
 }
 
 .gamification-card {
-  background: var(--card-bg);
-  border: var(--ui-border) solid var(--border-color);
-  border-radius: 4px;
-  padding: 20px;
-  transition: all 0.2s;
+  background: color-mix(in srgb, var(--card-bg) 60%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+  border-radius: 8px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.04);
 }
 
 .stats-card:hover, .gamification-card:hover {
@@ -618,16 +624,12 @@
 }
 
 .stats-gamification-wrapper {
-  border: var(--ui-border) solid var(--border-color);
-  border-radius: 6px;
-  padding: 20px;
   margin-bottom: 50px;
-  background: var(--card-bg);
 }
 .stats-gamification-wrapper .stats-gamification-grid {
   margin-bottom: 0;
 }
 
 .stats-gamification-wrapper .gamification-card {
-  background: var(--bg-color);
+  /* Inherits glassmorphism */
 }
