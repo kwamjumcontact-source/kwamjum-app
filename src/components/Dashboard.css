@@ -609,3 +609,14 @@
   color: var(--text-secondary);
   font-family: var(--font-mono);
 }
+
+.stats-gamification-wrapper {
+  border: var(--ui-border) solid var(--border-color);
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 50px;
+  background: var(--card-bg);
+}
+.stats-gamification-wrapper .stats-gamification-grid {
+  margin-bottom: 0;
+}

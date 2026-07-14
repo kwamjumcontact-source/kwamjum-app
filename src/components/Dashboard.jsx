@@ -107,8 +107,9 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
           </div>
         </section>
 
-        {/* 4-PANEL GAMIFICATION GRID */}
-        <section className="stats-gamification-grid">
+        {/* GAMIFICATION & STATS ROW */}
+        <div className="stats-gamification-wrapper">
+          <section className="stats-gamification-grid">
           
           {/* Panel 1: Heatmap & Streak */}
           <div className="gamification-card">
@@ -202,7 +203,8 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
 
 
 
-        </section>
+          </section>
+        </div>
 
         {/* DECKS OVERVIEW */}
         <section className="decks-overview-section">
