@@ -29,11 +29,6 @@ const AccountSettings = () => {
   const [masteredCardsCount, setMasteredCardsCount] = useState(0);
   const [totalStudiedCount, setTotalStudiedCount] = useState(0);
 
-  useEffect(() => {
-    if (user) {
-      fetchProfileData();
-    }
-  }, [user, fetchProfileData]);
 
   const fetchProfileData = useCallback(async () => {
     try {
@@ -79,6 +74,12 @@ const AccountSettings = () => {
       setLoading(false);
     }
   }, [user?.id]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProfileData();
+    }
+  }, [user, fetchProfileData]);
 
   const handleAvatarSelect = async (emoji) => {
     const updated = { ...profile, avatar: emoji };

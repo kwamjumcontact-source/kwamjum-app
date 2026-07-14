@@ -17,6 +17,7 @@ const MainApp = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [activeDeckId, setActiveDeckId] = useState(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   
   // Database State
   const [decks, setDecks] = useState([]);
@@ -182,16 +183,26 @@ const MainApp = () => {
   const activeDeck = decks.find(d => d.id === activeDeckId);
 
   return (
-    <div className="app-layout-wrapper" style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-color)' }}>
-      <Sidebar 
-        currentView={currentView} 
-        setCurrentView={setCurrentView} 
-        user={user} 
-        isCollapsed={isSidebarCollapsed}
-        onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-      />
+    <div className="app-layout-wrapper" style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-color)', flexDirection: 'column' }}>
       
-      <div className={`main-content-area ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      {/* Mobile Header (Only visible on small screens) */}
+      <div className="mobile-header">
+        <button className="hamburger-btn" onClick={() => setIsMobileSidebarOpen(true)}>☰</button>
+        <h2>Kwamjum</h2>
+      </div>
+
+      <div style={{ display: 'flex', flexGrow: 1 }}>
+        <Sidebar 
+          currentView={currentView} 
+          setCurrentView={setCurrentView} 
+          user={user} 
+          isCollapsed={isSidebarCollapsed}
+          onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          isOpenOnMobile={isMobileSidebarOpen}
+          onCloseMobile={() => setIsMobileSidebarOpen(false)}
+        />
+        
+        <div className={`main-content-area ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
         {currentView === 'dashboard' && (
           <Dashboard 
             decks={decks}
@@ -255,7 +266,8 @@ const MainApp = () => {
         startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
       />
       
-      </div> {/* End main-content-area */}
+        </div> {/* End main-content-area */}
+      </div> {/* End flex row */}
     </div>
   );
 };

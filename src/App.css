@@ -138,3 +138,12 @@
 
 .main-content-area { transition: margin-left 0.3s ease; }
 .main-content-area.sidebar-collapsed { margin-left: 80px !important; }
+
+.mobile-header { display: none; }
+.mobile-overlay { display: none; }
+@media (max-width: 768px) {
+  .mobile-header { display: flex; align-items: center; padding: 15px 20px; background: var(--surface-light); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 900; }
+  .mobile-header h2 { margin: 0; margin-left: 15px; color: var(--accent-color); font-family: var(--font-mono); font-size: 1.2rem; }
+  .hamburger-btn { background: transparent; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; padding: 5px; }
+  .mobile-overlay { display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 999; }
+}

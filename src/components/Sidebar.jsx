@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
-const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) => {
+const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isOpenOnMobile, onCloseMobile }) => {
   const navigate = useNavigate();
   const { signOut, userProfile } = useAuth();
   const [theme, setTheme] = useState(localStorage.getItem('kwamjum_theme') || 'dark');
@@ -24,8 +24,14 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
+  const handleNavClick = (view) => {
+    setCurrentView(view);
+    if (onCloseMobile) onCloseMobile();
+  };
+
   return (
-    <div className={`permanent-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+    <>
+      <div className={`permanent-sidebar ${isCollapsed ? 'collapsed' : ''} ${isOpenOnMobile ? 'mobile-open' : ''}`}>
       <div className="sidebar-brand">
         <button className="collapse-btn" onClick={onToggle}>☰</button>
         {!isCollapsed && <h2>Kwamjum</h2>}
@@ -34,7 +40,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
       <div className="sidebar-nav">
         <button 
           className={`nav-btn ${currentView === 'dashboard' ? 'active' : ''}`}
-          onClick={() => setCurrentView('dashboard')}
+          onClick={() => handleNavClick('dashboard')}
           title="Overview"
         >
           <span className="nav-icon">📊</span>
@@ -43,7 +49,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
         
         <button 
           className={`nav-btn ${currentView === 'library' ? 'active' : ''}`}
-          onClick={() => setCurrentView('library')}
+          onClick={() => handleNavClick('library')}
           title="My Decks"
         >
           <span className="nav-icon">📚</span>
@@ -52,7 +58,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
 
         <button 
           className={`nav-btn ${currentView === 'stats' ? 'active' : ''}`}
-          onClick={() => setCurrentView('stats')}
+          onClick={() => handleNavClick('stats')}
           title="Statistics"
         >
           <span className="nav-icon">📈</span>
@@ -111,6 +117,8 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
         </button>
       </div>
     </div>
+    {isOpenOnMobile && <div className="mobile-overlay" onClick={onCloseMobile}></div>}
+    </>
   );
 };
 

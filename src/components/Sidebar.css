@@ -111,10 +111,17 @@
   text-overflow: ellipsis;
 }
 
-/* Hide Sidebar on small screens */
+/* Mobile Sidebar */
 @media (max-width: 768px) {
   .permanent-sidebar {
-    display: none;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    width: 250px !important;
+  }
+  
+  .permanent-sidebar.mobile-open {
+    transform: translateX(0);
   }
 }
 
