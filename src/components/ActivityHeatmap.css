@@ -93,6 +93,17 @@
   color: var(--warning-color);
 }
 
+.heatmap-cell.goal-met {
+  border-color: var(--warning-color) !important;
+  background-color: rgba(234, 179, 8, 0.2) !important;
+  color: var(--warning-color) !important;
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.5) !important;
+}
+
+.heatmap-cell.goal-met:hover {
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.8) !important;
+}
+
 .heatmap-cell.ghost {
   opacity: 0.2;
   filter: grayscale(0.5) hue-rotate(90deg);

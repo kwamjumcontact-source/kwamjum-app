@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import './ActivityHeatmap.css';
 
-const ActivityHeatmap = ({ logs }) => {
+const ActivityHeatmap = ({ logs, dailyGoal = 20 }) => {
   const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -65,6 +65,9 @@ const ActivityHeatmap = ({ logs }) => {
         isFuture = true;
       }
 
+      // Check if goal is met
+      const isGoalMet = count >= dailyGoal;
+
       currentWeek.push({
         day: d,
         date: dateStr,
@@ -72,6 +75,7 @@ const ActivityHeatmap = ({ logs }) => {
         intensity,
         isGhost,
         isFuture,
+        isGoalMet,
         isToday: d === today.getDate()
       });
 
@@ -119,12 +123,13 @@ const ActivityHeatmap = ({ logs }) => {
             if (dayObj.isGhost) classNames += ' ghost';
             if (dayObj.isFuture) classNames += ' future';
             if (dayObj.isToday) classNames += ' today';
+            if (dayObj.isGoalMet) classNames += ' goal-met';
 
             return (
               <div 
                 key={`${wIndex}-${dIndex}`} 
                 className={classNames}
-                title={dayObj.isGhost ? "Start studying!" : `${dayObj.count} reviews on ${dayObj.date}`}
+                title={dayObj.isGhost ? "Start studying!" : `${dayObj.count} reviews on ${dayObj.date}${dayObj.isGoalMet ? ' (Goal Met! 🔥)' : ''}`}
               >
                 {dayObj.day}
               </div>

@@ -121,7 +121,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
               </div>
             </div>
             <div className="heatmap-wrapper">
-              <ActivityHeatmap logs={reviewLogs} />
+              <ActivityHeatmap logs={reviewLogs} dailyGoal={dailyGoal} />
             </div>
             <p className="panel-hint">Study every day to fill the board!</p>
           </div>
