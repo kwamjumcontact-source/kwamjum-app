@@ -70,9 +70,17 @@ export const getCardsForDeck = async (deckId) => {
     .select('*')
     .eq('deck_id', deckId)
     .order('created_at', { ascending: true });
-    
+  
   if (error) throw error;
-  return data;
+  
+  // Fix timezone issue if DB strips the 'Z' from timestamp without time zone
+  return data.map(card => {
+    let dueStr = card.due_date;
+    if (dueStr && !dueStr.endsWith('Z') && !dueStr.includes('+')) {
+      dueStr += 'Z';
+    }
+    return { ...card, due_date: dueStr };
+  });
 };
 
 export const getDueCardsForDeck = async (deckId, currentDateStr) => {
