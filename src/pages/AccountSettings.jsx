@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { getProfile, updateProfile, getDecks, getReviewLogs } from '../lib/db';
+import { getProfile, updateProfile, getDecks, getCardsForDeck, getReviewLogs } from '../lib/db';
 import { useNavigate } from 'react-router-dom';
 import './AccountSettings.css';
 
@@ -37,6 +37,7 @@ const AccountSettings = () => {
 
   const fetchProfileData = useCallback(async () => {
     try {
+      if (!user) return;
       const data = await getProfile(user.id);
       if (data) {
         setProfile((prev) => ({
@@ -55,15 +56,18 @@ const AccountSettings = () => {
       }
 
       // Fetch additional data for Achievements
-      const decks = await getDecks(user.id);
-      setDecksCount(decks.length);
+      const fetchedDecks = await getDecks(user.id);
+      setDecksCount(fetchedDecks.length);
 
       let mastered = 0;
-      decks.forEach(deck => {
-        deck.cards.forEach(card => {
-          if (card.interval >= 21) mastered++;
-        });
-      });
+      await Promise.all(
+        fetchedDecks.map(async (deck) => {
+          const cards = await getCardsForDeck(deck.id);
+          cards.forEach(card => {
+            if (card.interval >= 21) mastered++;
+          });
+        })
+      );
       setMasteredCardsCount(mastered);
 
       const logs = await getReviewLogs(user.id, 90);
@@ -74,7 +78,7 @@ const AccountSettings = () => {
     } finally {
       setLoading(false);
     }
-  }, [user.id]);
+  }, [user?.id]);
 
   const handleAvatarSelect = async (emoji) => {
     const updated = { ...profile, avatar: emoji };
