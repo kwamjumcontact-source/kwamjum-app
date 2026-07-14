@@ -100,31 +100,78 @@ const MascotAssistant = ({ currentView, streak, totalStudied, userName, decks, s
       return;
     }
 
-    // Load Lexitron dictionary if not loaded
+    setMessage(`กำลังค้นหาข้อมูลคำศัพท์ "${word}"... 🔍`);
+
+    // 1. Fetch POS and Example from Free Dictionary API
+    let dictPos = '';
+    let dictExample = '';
+    
+    try {
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data[0] && data[0].meanings) {
+          const parts = [...new Set(data[0].meanings.map(m => m.partOfSpeech))];
+          dictPos = parts.join(', ');
+          
+          for (const meaning of data[0].meanings) {
+            for (const def of meaning.definitions) {
+              if (def.example) {
+                dictExample = def.example;
+                break;
+              }
+            }
+            if (dictExample) break;
+          }
+        }
+      }
+    } catch (error) {
+      console.log("Dictionary API error:", error);
+    }
+
+    // 2. Fetch Thai Meaning (Lexitron or Google)
     if (!cachedDictionary) {
-      setMessage(`กำลังโหลดพจนานุกรม Lexitron (5MB) ครั้งแรก... 📚`);
       try {
         const res = await fetch('/lexitron.json');
         cachedDictionary = await res.json();
       } catch (e) {
-        console.error("Failed to load lexitron", e);
         cachedDictionary = {};
       }
     }
 
     const localResult = cachedDictionary[word];
+    let finalMeaning = '';
+    let finalPos = dictPos; // Prioritize English Dictionary API POS
+    
     if (localResult) {
-      setMessage(
-        <div className="dict-result">
-          <strong>{word}</strong> <span className="pos">({localResult.pos})</span>
-          <p className="meaning">แปลว่า: {localResult.meaning}</p>
-        </div>
-      );
+      finalMeaning = localResult.meaning;
+      if (!finalPos) finalPos = localResult.pos;
     } else {
-      // Fallback to Google Translate API
-      setMessage(`ค้นหาคำว่า "${word}" ในระบบ... 🔍`);
-      await fetchGoogleTranslate(word);
+      try {
+        const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=th&dt=t&q=${encodeURIComponent(word)}`);
+        const data = await response.json();
+        if (data && data[0]) {
+          data[0].forEach(chunk => {
+            if (chunk[0]) finalMeaning += chunk[0];
+          });
+        }
+      } catch (err) {
+        finalMeaning = "ไม่พบคำแปล";
+      }
     }
+
+    setMessage(
+      <div className="dict-result">
+        <strong>{word}</strong> {finalPos && <span className="pos">({finalPos})</span>}
+        <p className="meaning">แปลว่า: {finalMeaning}</p>
+        {dictExample && (
+          <div className="example-box" style={{marginTop: '8px', padding: '8px', backgroundColor: 'var(--surface-light)', borderRadius: '6px', borderLeft: '3px solid var(--primary-color)'}}>
+            <small style={{color: 'var(--text-secondary)', display: 'block', marginBottom: '2px'}}>ตัวอย่างประโยค (Example):</small>
+            <p style={{fontStyle: 'italic', margin: 0, lineHeight: 1.4}}>"{dictExample}"</p>
+          </div>
+        )}
+      </div>
+    );
     
     setInputText('');
   };
