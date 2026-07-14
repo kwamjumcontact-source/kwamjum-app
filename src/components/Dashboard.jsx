@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
-import { PlayCircle, Plus, Flame } from '@phosphor-icons/react';
+import { PlayCircle, Plus, Flame, Target } from '@phosphor-icons/react';
 
 import ActivityHeatmap from './ActivityHeatmap';
 import './Dashboard.css';
@@ -176,7 +176,11 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
           {/* Panel 3: Daily Goals */}
           <div className="gamification-card goals-card">
             <h3>Daily Goals</h3>
+            <div className="goals-watermark">
+              <Target size={140} weight="duotone" />
+            </div>
             
+            <div className="goals-content">
             <div className="goal-item">
               <div className="goal-header">
                 <span className="goal-title">Daily Review</span>
@@ -195,6 +199,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
               <div className="goal-progress-bg">
                 <div className="goal-progress-fill" style={{ width: `${newCardsProgress}%`, backgroundColor: '#8b5cf6' }}></div>
               </div>
+            </div>
             </div>
           </div>
 
