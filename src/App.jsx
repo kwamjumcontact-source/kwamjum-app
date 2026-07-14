@@ -7,13 +7,15 @@ import ProtectedRoute from './components/ProtectedRoute';
 import MainApp from './pages/MainApp';
 import AccountSettings from './pages/AccountSettings';
 import HelpFeedback from './pages/HelpFeedback';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Router>
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Auth />} />
@@ -50,6 +52,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
