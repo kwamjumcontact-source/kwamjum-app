@@ -68,6 +68,13 @@ const MainApp = () => {
     fetchData();
   }, [user, currentDate, fetchData]);
 
+  // Refresh data when returning to dashboard to ensure due counts are accurate
+  useEffect(() => {
+    if (currentView === 'dashboard') {
+      fetchData();
+    }
+  }, [currentView, fetchData]);
+
   // SM-2 Algorithm Integration (Anki Style)
   const handleRating = async (cardId, rating) => {
     const deck = decks.find(d => d.id === activeDeckId);
