@@ -29,12 +29,16 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
     if (onCloseMobile) onCloseMobile();
   };
 
+  const isEffectivelyCollapsed = isCollapsed && !isOpenOnMobile;
+
   return (
     <>
-      <div className={`permanent-sidebar ${isCollapsed ? 'collapsed' : ''} ${isOpenOnMobile ? 'mobile-open' : ''}`}>
+      <div className={`permanent-sidebar ${isEffectivelyCollapsed ? 'collapsed' : ''} ${isOpenOnMobile ? 'mobile-open' : ''}`}>
       <div className="sidebar-brand">
-        <button className="collapse-btn" onClick={onToggle}>☰</button>
-        {!isCollapsed && <h2>Kwamjum</h2>}
+        <button className="collapse-btn" onClick={isOpenOnMobile ? onCloseMobile : onToggle}>
+          {isOpenOnMobile ? '✕' : '☰'}
+        </button>
+        {!isEffectivelyCollapsed && <h2>Kwamjum</h2>}
       </div>
 
       <div className="sidebar-nav">
@@ -44,7 +48,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           title="Overview"
         >
           <span className="nav-icon">📊</span>
-          {!isCollapsed && "Overview"}
+          {!isEffectivelyCollapsed && "Overview"}
         </button>
         
         <button 
@@ -53,7 +57,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           title="My Decks"
         >
           <span className="nav-icon">📚</span>
-          {!isCollapsed && "My Decks"}
+          {!isEffectivelyCollapsed && "My Decks"}
         </button>
 
         <button 
@@ -62,7 +66,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           title="Statistics"
         >
           <span className="nav-icon">📈</span>
-          {!isCollapsed && "Statistics"}
+          {!isEffectivelyCollapsed && "Statistics"}
         </button>
       </div>
 
@@ -73,7 +77,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           onClick={toggleTheme}
         >
           <span className="nav-icon">{theme === 'light' ? '☀️' : '🌙'}</span>
-          {!isCollapsed && (theme === 'light' ? 'Light Mode' : 'Dark Mode')}
+          {!isEffectivelyCollapsed && (theme === 'light' ? 'Light Mode' : 'Dark Mode')}
         </button>
         <button 
           className="nav-btn feedback-btn" 
@@ -81,7 +85,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           onClick={() => navigate('/help')}
         >
           <span className="nav-icon">💬</span>
-          {!isCollapsed && "Send Feedback"}
+          {!isEffectivelyCollapsed && "Send Feedback"}
         </button>
 
         <button 
@@ -91,14 +95,14 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           style={{ marginBottom: '20px' }}
         >
           <span className="nav-icon">⚙️</span>
-          {!isCollapsed && "Settings"}
+          {!isEffectivelyCollapsed && "Settings"}
         </button>
         
         <div className="user-profile-mini">
           <div className="avatar">
             {userProfile?.avatar || user?.email?.charAt(0).toUpperCase() || 'U'}
           </div>
-          {!isCollapsed && (
+          {!isEffectivelyCollapsed && (
             <div className="user-details">
               <span className="user-name">{userProfile?.username || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}</span>
               <span className="user-email">{user?.email}</span>
