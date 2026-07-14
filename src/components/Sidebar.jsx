@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Sidebar.css';
+import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
 const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) => {
   const navigate = useNavigate();
+  const { signOut, userProfile } = useAuth();
+  const [theme, setTheme] = useState(localStorage.getItem('kwamjum_theme') || 'dark');
+
+  useEffect(() => {
+    // Sync with userProfile if available on load
+    if (userProfile?.ui_theme && userProfile.ui_theme !== theme) {
+      setTheme(userProfile.ui_theme);
+    }
+  }, [userProfile?.ui_theme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('kwamjum_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
   return (
     <div className={`permanent-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-brand">
@@ -43,6 +62,14 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
 
       <div className="sidebar-footer">
         <button 
+          className="nav-btn theme-toggle-btn" 
+          title="Toggle Theme"
+          onClick={toggleTheme}
+        >
+          <span className="nav-icon">{theme === 'light' ? '☀️' : '🌙'}</span>
+          {!isCollapsed && (theme === 'light' ? 'Light Mode' : 'Dark Mode')}
+        </button>
+        <button 
           className="nav-btn feedback-btn" 
           title="Send Feedback"
           onClick={() => navigate('/help')}
@@ -63,15 +90,25 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
         
         <div className="user-profile-mini">
           <div className="avatar">
-            {user?.email?.charAt(0).toUpperCase() || 'U'}
+            {userProfile?.avatar || user?.email?.charAt(0).toUpperCase() || 'U'}
           </div>
           {!isCollapsed && (
             <div className="user-details">
-              <span className="user-name">{user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}</span>
+              <span className="user-name">{userProfile?.username || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}</span>
               <span className="user-email">{user?.email}</span>
             </div>
           )}
         </div>
+        
+        <button 
+          className="nav-btn logout-btn" 
+          title="Log Out"
+          onClick={signOut}
+          style={{ marginTop: '10px', color: '#f43f5e' }}
+        >
+          <span className="nav-icon">🚪</span>
+          {!isCollapsed && "Log Out"}
+        </button>
       </div>
     </div>
   );
