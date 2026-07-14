@@ -105,16 +105,6 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
             </div>
           )}
         </div>
-        
-        <button 
-          className="nav-btn logout-btn" 
-          title="Log Out"
-          onClick={signOut}
-          style={{ marginTop: '10px', color: '#f43f5e' }}
-        >
-          <span className="nav-icon">🚪</span>
-          {!isCollapsed && "Log Out"}
-        </button>
       </div>
     </div>
     {isOpenOnMobile && <div className="mobile-overlay" onClick={onCloseMobile}></div>}

@@ -7,7 +7,7 @@ import './AccountSettings.css';
 const AVATARS = ['🐶', '🐱', '🐼', '🦊', '🐧', '🐨', '🐯', '🦁', '🐵', '🐸', '🦄', '🐙'];
 
 const AccountSettings = () => {
-  const { user, updateProfileContext } = useAuth();
+  const { user, updateProfileContext, signOut } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState({ 
     username: '', 
@@ -299,6 +299,33 @@ const AccountSettings = () => {
             </button>
           </div>
         </form>
+
+        <div className="account-section" style={{ marginTop: '30px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
+          <h3 style={{ color: '#f43f5e' }}>Danger Zone</h3>
+          <div style={{ marginTop: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <strong>Log Out</strong>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: '5px 0 0 0' }}>Sign out of your account on this device.</p>
+            </div>
+            <button 
+              onClick={signOut}
+              style={{
+                background: 'rgba(244, 63, 94, 0.1)',
+                color: '#f43f5e',
+                border: '1px solid #f43f5e',
+                padding: '10px 20px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              🚪 Log Out
+            </button>
+          </div>
+        </div>
 
       </div>
     </div>
