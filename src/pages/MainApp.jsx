@@ -92,8 +92,8 @@ const MainApp = () => {
         interval: finalInterval,
         due_date: newDueDate.toISOString()
       });
-      // Refresh data to reflect new due dates
-      await fetchData();
+      // We will not call fetchData() here to avoid resetting StudyView's internal state.
+      // StudyView will manage the active session's queue in memory.
     } catch (error) {
       console.error("Error saving review:", error);
     }
