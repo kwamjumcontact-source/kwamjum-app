@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Sidebar.css';
 import './Sidebar.css';
 
 const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) => {
+  const navigate = useNavigate();
   return (
     <div className={`permanent-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-brand">
@@ -39,15 +42,24 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
       </div>
 
       <div className="sidebar-footer">
-        <a 
-          href="mailto:support@kwamjum.com?subject=Kwamjum%20Feedback" 
+        <button 
           className="nav-btn feedback-btn" 
           title="Send Feedback"
-          style={{ textDecoration: 'none', display: 'flex' }}
+          onClick={() => navigate('/help')}
         >
           <span className="nav-icon">💬</span>
           {!isCollapsed && "Send Feedback"}
-        </a>
+        </button>
+
+        <button 
+          className="nav-btn settings-btn" 
+          title="Settings"
+          onClick={() => navigate('/account')}
+          style={{ marginBottom: '20px' }}
+        >
+          <span className="nav-icon">⚙️</span>
+          {!isCollapsed && "Settings"}
+        </button>
         
         <div className="user-profile-mini">
           <div className="avatar">

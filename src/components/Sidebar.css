@@ -128,3 +128,5 @@
 .permanent-sidebar.collapsed .sidebar-footer { padding-top: 20px; }
 .permanent-sidebar.collapsed .feedback-btn { margin-bottom: 20px; justify-content: center; }
 .feedback-btn { margin-bottom: 20px; }
+
+.permanent-sidebar.collapsed .settings-btn { justify-content: center; margin-bottom: 20px; }
