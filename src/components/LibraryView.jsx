@@ -55,7 +55,7 @@ const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy, onExportDeck, o
             style={{ display: 'none' }} 
             accept=".json,.csv"
           />
-          <button className="secondary-btn" onClick={() => fileInputRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--card-bg)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: '600' }}>
+          <button className="secondary-btn import-btn" onClick={() => fileInputRef.current?.click()}>
             <UploadSimple size={20} weight="bold" /> Import
           </button>
           <button className="primary-btn" onClick={onNewDeck}>
@@ -79,8 +79,8 @@ const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy, onExportDeck, o
               <h2 className="category-title">{category}</h2>
               <div className="decks-grid">
                 {categories[category].map(deck => (
-                  <div key={deck.id} className="deck-card" onClick={() => startStudy(deck.id)}>
-                    <div className="deck-card-header" style={{ borderBottomColor: deck.color }}>
+                  <div key={deck.id} className="deck-card" style={{ '--deck-color': deck.color || 'var(--primary-color)' }} onClick={() => startStudy(deck.id)}>
+                    <div className="deck-card-header">
                       <h3>{deck.title}</h3>
                       <div className="deck-actions" style={{ display: 'flex', gap: '5px' }}>
                         <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onExportDeck && onExportDeck(deck.id); }} title="Export Deck">

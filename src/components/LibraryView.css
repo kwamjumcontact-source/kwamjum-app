@@ -13,38 +13,49 @@
 }
 
 .library-header h1 {
-  font-size: 2.5rem;
-  margin: 0 0 10px 0;
+  font-size: 2rem;
+  margin: 0 0 8px 0;
   color: var(--text-primary);
+  font-weight: 700;
 }
 
 .library-subtitle {
   color: var(--text-secondary);
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .library-actions {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
 }
 
 .search-input {
-  padding: 12px 20px;
+  padding: 0 16px;
+  height: 44px;
   border-radius: 4px;
   border: 1px solid var(--border-color);
-  background: var(--surface-light);
+  background: var(--bg-color);
   color: var(--text-primary);
   width: 250px;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2);
 }
 
 .primary-btn {
   background: var(--primary-color);
   color: #FFFFFF;
   border: none;
-  padding: 12px 24px;
+  height: 44px;
+  padding: 0 20px;
   border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
@@ -52,6 +63,28 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  box-sizing: border-box;
+}
+
+.import-btn {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.import-btn:hover {
+  background: var(--hover-bg);
+  border-color: var(--text-secondary);
 }
 
 .primary-btn:hover {
@@ -83,13 +116,24 @@
 }
 
 .category-title {
-  font-size: 1.5rem;
-  color: var(--text-primary);
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-color);
-  display: inline-block;
-  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  padding-bottom: 0;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.category-title::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background: var(--border-color);
 }
 
 .decks-grid {
@@ -103,31 +147,35 @@
   border-radius: 4px;
   padding: 24px;
   border: 1px solid var(--border-color);
+  border-top: 4px solid var(--deck-color, var(--primary-color));
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  position: relative;
+  overflow: hidden;
 }
 
 .deck-card:hover {
   transform: translateY(-4px);
-  border-color: var(--primary-color);
-  box-shadow: 0 12px 24px rgba(13, 148, 136, 0.12);
+  border-color: var(--border-color);
+  border-top-color: var(--deck-color, var(--primary-color));
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1), 0 4px 20px color-mix(in srgb, var(--deck-color, var(--primary-color)) 20%, transparent);
 }
 
 .deck-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border-bottom: 3px solid transparent;
   padding-bottom: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .deck-card-header h3 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -136,9 +184,9 @@
   border: none;
   cursor: pointer;
   color: var(--text-secondary);
-  opacity: 0.4;
+  opacity: 0; /* Hidden until hover */
   transition: all 0.2s;
-  padding: 8px;
+  padding: 6px;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -147,12 +195,12 @@
 
 .edit-btn:hover {
   background: var(--hover-bg);
-  color: var(--primary-color);
-  opacity: 1;
+  color: var(--text-primary);
+  opacity: 1 !important;
 }
 
 .deck-card:hover .edit-btn {
-  opacity: 0.8;
+  opacity: 0.6;
 }
 
 .deck-description {
@@ -172,19 +220,25 @@
 }
 
 .due-badge {
-  background: rgba(217, 119, 6, 0.1);
+  background: var(--hover-bg);
   color: var(--warning-color);
-  padding: 6px 12px;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  padding: 4px 10px;
   border-radius: 4px;
   font-weight: 600;
   font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .up-to-date-badge {
-  background: rgba(5, 150, 105, 0.1);
+  background: var(--hover-bg);
   color: var(--success-color);
-  padding: 6px 12px;
+  border: 1px solid rgba(5, 150, 105, 0.3);
+  padding: 4px 10px;
   border-radius: 4px;
   font-weight: 600;
   font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
