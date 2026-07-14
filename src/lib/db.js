@@ -10,23 +10,42 @@ export const getDecks = async (userId) => {
     .order('created_at', { ascending: true });
   
   if (error) throw error;
-  return data;
+  
+  // Parse category from description (e.g. "[Language] My deck description")
+  return data.map(deck => {
+    let category = 'General';
+    let description = deck.description || '';
+    const match = description.match(/^\[(.*?)\] (.*)$/);
+    if (match) {
+      category = match[1];
+      description = match[2];
+    } else if (description.startsWith('[')) {
+      const closingIdx = description.indexOf(']');
+      if (closingIdx !== -1) {
+        category = description.substring(1, closingIdx);
+        description = description.substring(closingIdx + 1).trim();
+      }
+    }
+    return { ...deck, category, description, raw_description: deck.description };
+  });
 };
 
-export const createDeck = async (userId, title, description, color) => {
+export const createDeck = async (userId, title, description, color, category = 'General') => {
+  const encodedDescription = `[${category}] ${description}`;
   const { data, error } = await supabase
     .from('decks')
-    .insert([{ user_id: userId, title, description, color }])
+    .insert([{ user_id: userId, title, description: encodedDescription, color }])
     .select();
   
   if (error) throw error;
   return data[0];
 };
 
-export const updateDeck = async (deckId, title, description, color) => {
+export const updateDeck = async (deckId, title, description, color, category = 'General') => {
+  const encodedDescription = `[${category}] ${description}`;
   const { data, error } = await supabase
     .from('decks')
-    .update({ title, description, color })
+    .update({ title, description: encodedDescription, color })
     .eq('id', deckId)
     .select();
     

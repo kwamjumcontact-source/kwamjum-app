@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
-import SidebarMenu from './SidebarMenu';
+
 import ActivityHeatmap from './ActivityHeatmap';
 import './Dashboard.css';
 
@@ -71,7 +71,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
 
   return (
     <>
-      <SidebarMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      
       
       <div className="dashboard-container">
         <header className="dashboard-header-simple">
@@ -206,65 +206,6 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
           </section>
         </div>
 
-        {/* DECKS OVERVIEW */}
-        <section className="decks-overview-section">
-          <div className="section-header-flex">
-            <h2>Your Decks</h2>
-            <div className="deck-actions-right">
-              <input 
-                type="text" 
-                className="deck-search-input" 
-                placeholder="Search decks..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button className="add-deck-small-btn" onClick={onNewDeck}>+ New Deck</button>
-            </div>
-          </div>
-
-          <div className="decks-grid">
-            {filteredDecks.map(deck => {
-              const total = deck.cards.length;
-              const mastered = deck.cards.filter(c => c.interval >= 21).length;
-              const progressPercent = total === 0 ? 0 : Math.round((mastered / total) * 100);
-
-              return (
-                <div key={deck.id} className="deck-card modern-deck-card" style={{ '--deck-color': deck.color || 'var(--accent-color)' }}>
-                  <div className="deck-card-header" onClick={() => deck.cards.length > 0 ? startStudy(deck.id) : null}>
-                    <div className="deck-header-top">
-                      <div className="deck-icon">{deck.title.charAt(0).toUpperCase()}</div>
-                      <div className="deck-mini-donut" style={{ background: `conic-gradient(var(--deck-color, var(--accent-color)) 0% ${progressPercent}%, rgba(255,255,255,0.1) ${progressPercent}% 100%)` }}></div>
-                    </div>
-                    <div className="deck-title-area mt-3">
-                      <h3>{deck.title}</h3>
-                      <span className="deck-description">{deck.description || 'No description'}</span>
-                    </div>
-                  </div>
-
-                  <div className="deck-card-footer">
-                    <span className="deck-card-stats">
-                      <span className={deck.dueToday > 0 ? 'text-warning font-bold' : ''}>{deck.dueToday} Due</span> <span className="separator">|</span> {total} Total
-                    </span>
-                    <div className="deck-card-actions">
-                      <button className="deck-action-btn add-card-btn" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }}>
-                        + Add Card
-                      </button>
-                      <button className="deck-action-btn edit-btn" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }}>
-                        ⚙️ Edit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-            
-            {filteredDecks.length === 0 && (
-              <div className="empty-decks-state">
-                <p>{searchTerm ? 'No decks found matching your search.' : "You don't have any decks yet. Create one to get started!"}</p>
-              </div>
-            )}
-          </div>
-        </section>
       </div>
     </>
   );

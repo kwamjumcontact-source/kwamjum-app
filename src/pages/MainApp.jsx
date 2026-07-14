@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, deleteCard, saveCardReview, logReview, getReviewLogs, getProfile, updateStreak } from '../lib/db';
 import Dashboard from '../components/Dashboard';
+import LibraryView from '../components/LibraryView';
+import Sidebar from '../components/Sidebar';
 import StudyView from '../components/StudyView';
 import StatsView from '../components/StatsView';
 import DeckEditorModal from '../components/DeckEditorModal';
@@ -127,9 +129,9 @@ const MainApp = () => {
     try {
       let savedDeckId = editingDeck?.id;
       if (savedDeckId) {
-        await updateDeck(savedDeckId, deckData.title, deckData.description, deckData.color);
+        await updateDeck(savedDeckId, deckData.title, deckData.description, deckData.color, deckData.category);
       } else {
-        const newDeck = await createDeck(user.id, deckData.title, deckData.description, deckData.color);
+        const newDeck = await createDeck(user.id, deckData.title, deckData.description, deckData.color, deckData.category);
         savedDeckId = newDeck.id;
       }
 
@@ -174,20 +176,34 @@ const MainApp = () => {
   const activeDeck = decks.find(d => d.id === activeDeckId);
 
   return (
-    <div className="app-wrapper">
-      {currentView === 'dashboard' && (
-        <Dashboard 
-          decks={decks}
-          streak={userProfile?.current_streak || 0}
-          totalStudied={totalStudied}
-          dailyGoal={userProfile?.daily_goal || 20}
-          reviewLogs={reviewLogs}
-          onNewDeck={() => { setEditingDeck(null); setIsEditorOpen(true); }}
-          onEditDeck={(deck) => { setEditingDeck(deck); setIsEditorOpen(true); }}
-          startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
-          onViewStats={() => setCurrentView('stats')}
-        />
-      )}
+    <div className="app-layout-wrapper" >
+      <Sidebar 
+        currentView={currentView} 
+        setCurrentView={setCurrentView} 
+        user={user} 
+      />
+      
+      <div className="main-content-area" >
+        {currentView === 'dashboard' && (
+          <Dashboard 
+            decks={decks}
+            streak={userProfile?.current_streak || 0}
+            totalStudied={totalStudied}
+            dailyGoal={userProfile?.daily_goal || 20}
+            reviewLogs={reviewLogs}
+            startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
+            onViewStats={() => setCurrentView('stats')}
+          />
+        )}
+
+        {currentView === 'library' && (
+          <LibraryView 
+            decks={decks}
+            onNewDeck={() => { setEditingDeck(null); setIsEditorOpen(true); }}
+            onEditDeck={(deck) => { setEditingDeck(deck); setIsEditorOpen(true); }}
+            startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
+          />
+        )}
 
       {currentView === 'study' && activeDeck && (
         <StudyView 
@@ -230,6 +246,8 @@ const MainApp = () => {
         decks={decks}
         startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
       />
+      
+      </div> {/* End main-content-area */}
     </div>
   );
 };

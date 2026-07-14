@@ -6,6 +6,7 @@ const DeckEditorModal = ({ onClose, onSave, onDelete, initialDeck = null }) => {
   
   const [title, setTitle] = useState(initialDeck?.title || '');
   const [description, setDescription] = useState(initialDeck?.description || '');
+  const [category, setCategory] = useState(initialDeck?.category || 'General');
   const [color, setColor] = useState(initialDeck?.color || '#3b82f6');
   
   const [cards, setCards] = useState(initialDeck?.cards || []);
@@ -74,6 +75,7 @@ const DeckEditorModal = ({ onClose, onSave, onDelete, initialDeck = null }) => {
       id: initialDeck?.id || Date.now(),
       title,
       description,
+      category,
       color,
       cards: cards
     };
@@ -97,6 +99,17 @@ const DeckEditorModal = ({ onClose, onSave, onDelete, initialDeck = null }) => {
             </div>
             <div className="form-group">
               <input type="text" placeholder="Description (Optional)" value={description} onChange={e => setDescription(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <input type="text" list="categories-list" placeholder="Category (e.g. Languages)" value={category} onChange={e => setCategory(e.target.value)} />
+              <datalist id="categories-list">
+                <option value="General" />
+                <option value="Languages" />
+                <option value="Programming" />
+                <option value="Science" />
+                <option value="History" />
+                <option value="Mathematics" />
+              </datalist>
             </div>
             <div className="form-group color-picker">
               <label>Theme Color:</label>
