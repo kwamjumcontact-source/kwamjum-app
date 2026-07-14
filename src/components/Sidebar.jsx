@@ -39,10 +39,15 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle }) =
       </div>
 
       <div className="sidebar-footer">
-        <button className="nav-btn feedback-btn" title="Send Feedback">
+        <a 
+          href="mailto:support@kwamjum.com?subject=Kwamjum%20Feedback" 
+          className="nav-btn feedback-btn" 
+          title="Send Feedback"
+          style={{ textDecoration: 'none', display: 'flex' }}
+        >
           <span className="nav-icon">💬</span>
           {!isCollapsed && "Send Feedback"}
-        </button>
+        </a>
         
         <div className="user-profile-mini">
           <div className="avatar">

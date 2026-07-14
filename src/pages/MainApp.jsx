@@ -29,8 +29,7 @@ const MainApp = () => {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingDeck, setEditingDeck] = useState(null);
   
-  // Simulation / Time
-  const [currentDate, setCurrentDate] = useState(new Date());
+
 
   // Fetch initial data
   const fetchData = useCallback(async () => {
@@ -42,7 +41,8 @@ const MainApp = () => {
       const decksWithCards = await Promise.all(
         fetchedDecks.map(async (deck) => {
           const cards = await getCardsForDeck(deck.id);
-          const dueToday = cards.filter(c => new Date(c.due_date) <= currentDate).length;
+          const now = new Date();
+          const dueToday = cards.filter(c => new Date(c.due_date) <= now).length;
           return { ...deck, cards, dueToday };
         })
       );
@@ -65,11 +65,11 @@ const MainApp = () => {
     } finally {
       setLoading(false);
     }
-  }, [user.id, currentDate]);
+  }, [user.id]);
 
   useEffect(() => {
     fetchData();
-  }, [user, currentDate, fetchData]);
+  }, [user, fetchData]);
 
   // SM-2 Algorithm Integration (Anki Style)
   const handleRating = async (cardId, rating) => {
@@ -83,9 +83,9 @@ const MainApp = () => {
     const maxInterval = userProfile?.max_interval_days || 365;
     const finalInterval = Math.min(interval, maxInterval);
 
-    // Calculate new due date based on simulated currentDate
+    // Calculate new due date based on real time
     // interval is returned in DAYS from processReview
-    const newDueDate = new Date(currentDate.getTime() + finalInterval * 24 * 60 * 60 * 1000);
+    const newDueDate = new Date(Date.now() + finalInterval * 24 * 60 * 60 * 1000);
 
     // Optimistically update the decks state immediately to prevent race conditions
     setDecks(prevDecks => prevDecks.map(d => {
@@ -102,7 +102,8 @@ const MainApp = () => {
           }
           return c;
         });
-        const dueToday = updatedCards.filter(c => new Date(c.due_date) <= currentDate).length;
+        const now = new Date();
+        const dueToday = updatedCards.filter(c => new Date(c.due_date) <= now).length;
         return { ...d, cards: updatedCards, dueToday };
       }
       return d;
@@ -211,7 +212,7 @@ const MainApp = () => {
       {currentView === 'study' && activeDeck && (
         <StudyView 
           deck={activeDeck}
-          dueCards={activeDeck.cards.filter(c => new Date(c.due_date) <= currentDate)}
+          dueCards={activeDeck.cards.filter(c => new Date(c.due_date) <= new Date())}
           autoFlipSeconds={userProfile?.auto_flip_seconds || 0}
           onRating={handleRating}
           onFinish={async () => {
