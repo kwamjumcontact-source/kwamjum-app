@@ -28,7 +28,7 @@ const HelpFeedback = () => {
           <div className="faq-item">
             <h3>🧠 How does the spaced repetition algorithm work?</h3>
             <p>
-              We use a modified version of the SM-2 algorithm (similar to Anki). 
+              We use a modified version of the SM-2 algorithm. 
               When you rate a card "Easy", the interval before you see it again increases significantly. 
               If you rate it "Again", it resets to a learning phase so you can master it quickly.
             </p>
