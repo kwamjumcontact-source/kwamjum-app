@@ -74,11 +74,22 @@ export const getCardsForDeck = async (deckId) => {
   if (error) throw error;
   
   // Fix timezone issue if DB strips the 'Z' from timestamp without time zone
+  // and check localStorage for exact minute precision (bypasses DB DATE column truncation)
   return data.map(card => {
     let dueStr = card.due_date;
     if (dueStr && !dueStr.endsWith('Z') && !dueStr.includes('+')) {
       dueStr += 'Z';
     }
+    
+    const localDue = localStorage.getItem(`kwamjum_due_${card.id}`);
+    if (localDue) {
+      const localDueDate = new Date(parseInt(localDue, 10));
+      // Use local precision if it's still valid
+      if (localDueDate > new Date()) {
+         dueStr = localDueDate.toISOString();
+      }
+    }
+    
     return { ...card, due_date: dueStr };
   });
 };

@@ -110,18 +110,22 @@ const MainApp = () => {
     }));
 
     // Save to Supabase
+    localStorage.setItem(`kwamjum_due_${cardId}`, newDueDate.getTime().toString());
+
+    // Save to Supabase
     try {
       await logReview(user.id, activeDeckId, cardId, rating);
       await saveCardReview(cardId, {
         repetitions,
         ease: parseFloat(ease.toFixed(2)),
-        interval: finalInterval,
+        interval: Math.round(finalInterval), // Round to integer to prevent Postgres float-to-int errors
         due_date: newDueDate.toISOString()
       });
       // We will not call fetchData() here to avoid resetting StudyView's internal state.
       // StudyView will manage the active session's queue in memory.
     } catch (error) {
       console.error("Error saving review:", error);
+      alert("Error saving review to database: " + error.message);
     }
   };
 
