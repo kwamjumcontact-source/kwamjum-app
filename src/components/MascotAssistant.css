@@ -202,18 +202,16 @@
   position: absolute;
   top: -20px;
   left: -50px;
-  width: 60px;
+  width: 70px;
   height: 120px;
-  background: rgba(10, 10, 15, 0.95);
+  background: rgba(20, 20, 25, 0.95);
   border: 2px solid var(--border-color);
   border-right: none;
   border-top-left-radius: 60px;
   border-bottom-left-radius: 60px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  padding: 10px 10px 10px 0;
+  overflow: hidden;
   z-index: 1; /* Below the mascot */
   opacity: 0;
   transform: scale(0.5) translateX(30px);
@@ -221,6 +219,7 @@
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: auto; /* Catch hover so it doesn't disappear */
   box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+  padding-right: 20px; /* Hide right edge behind mascot */
 }
 
 .mascot-wrapper:hover .radial-menu {
@@ -229,23 +228,25 @@
 }
 
 .radial-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--primary-color);
+  width: 100%;
+  flex: 1;
+  background: transparent;
   color: white;
-  border: 2px solid var(--border-color);
+  border: none;
   font-weight: bold;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.btn-translate {
+  border-bottom: 2px solid var(--border-color);
 }
 
 .radial-btn:hover {
-  background: var(--accent-color);
-  transform: scale(1.1);
-  border-color: var(--accent-color);
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--accent-color);
 }
