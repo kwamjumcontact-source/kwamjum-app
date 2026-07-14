@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { getProfile, updateProfile } from '../lib/db';
+import { getProfile, updateProfile, getDecks, getReviewLogs } from '../lib/db';
 import { useNavigate } from 'react-router-dom';
 import './AccountSettings.css';
 
@@ -23,6 +23,11 @@ const AccountSettings = () => {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Achievement Data
+  const [decksCount, setDecksCount] = useState(0);
+  const [masteredCardsCount, setMasteredCardsCount] = useState(0);
+  const [totalStudiedCount, setTotalStudiedCount] = useState(0);
 
   useEffect(() => {
     if (user) {
@@ -48,6 +53,22 @@ const AccountSettings = () => {
           document.documentElement.setAttribute('data-font-size', data.font_size);
         }
       }
+
+      // Fetch additional data for Achievements
+      const decks = await getDecks(user.id);
+      setDecksCount(decks.length);
+
+      let mastered = 0;
+      decks.forEach(deck => {
+        deck.cards.forEach(card => {
+          if (card.interval >= 21) mastered++;
+        });
+      });
+      setMasteredCardsCount(mastered);
+
+      const logs = await getReviewLogs(user.id, 90);
+      setTotalStudiedCount(logs.length);
+
     } catch (error) {
       console.error('Error fetching profile:', error);
     } finally {
@@ -181,6 +202,29 @@ const AccountSettings = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
               <span className="info-value">{user?.email}</span>
               <button className="edit-btn" disabled title="Email cannot be changed here">Edit</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Achievements Section */}
+        <div className="account-section">
+          <h3>Achievements</h3>
+          <div className="achievements-grid" style={{ marginTop: '15px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '15px' }}>
+            <div className={`achievement-badge ${decksCount > 0 ? 'unlocked gold' : 'locked'}`} title="Create your first deck" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>📦</div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>First Deck</span>
+            </div>
+            <div className={`achievement-badge ${profile.current_streak > 0 ? 'unlocked orange' : 'locked'}`} title="Get your first streak" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>🔥</div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>First Streak</span>
+            </div>
+            <div className={`achievement-badge ${masteredCardsCount >= 10 ? 'unlocked green' : 'locked'}`} title="Master 10 cards" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>🧠</div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>Master 10</span>
+            </div>
+            <div className={`achievement-badge ${totalStudiedCount >= 100 ? 'unlocked blue' : 'locked'}`} title="Complete 100 reviews" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>💯</div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>Centurion</span>
             </div>
           </div>
         </div>

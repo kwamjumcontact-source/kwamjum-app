@@ -200,28 +200,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
             </div>
           </div>
 
-          {/* Panel 4: Achievements */}
-          <div className="gamification-card achievements-card">
-            <h3>Achievements</h3>
-            <div className="achievements-grid">
-              <div className={`achievement-badge ${decks.length > 0 ? 'unlocked gold' : 'locked'}`} title="Create your first deck">
-                <div className="badge-icon">📦</div>
-                <span className="badge-name">First Deck</span>
-              </div>
-              <div className={`achievement-badge ${streak > 0 ? 'unlocked orange' : 'locked'}`} title="Get your first streak">
-                <div className="badge-icon">🔥</div>
-                <span className="badge-name">First Streak</span>
-              </div>
-              <div className={`achievement-badge ${masteredCards >= 10 ? 'unlocked green' : 'locked'}`} title="Master 10 cards">
-                <div className="badge-icon">🧠</div>
-                <span className="badge-name">Master 10</span>
-              </div>
-              <div className={`achievement-badge ${totalStudied >= 100 ? 'unlocked blue' : 'locked'}`} title="Complete 100 reviews">
-                <div className="badge-icon">💯</div>
-                <span className="badge-name">Centurion</span>
-              </div>
-            </div>
-          </div>
+
 
         </section>
 
