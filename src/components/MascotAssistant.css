@@ -138,3 +138,54 @@
     font-size: 0.85rem;
   }
 }
+
+.chat-mode-bubble {
+  min-width: 250px;
+}
+.dict-result strong {
+  font-size: 1.1rem;
+  color: var(--accent-color);
+}
+.dict-result .pos {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-left: 5px;
+}
+.dict-result .meaning {
+  margin: 8px 0;
+  font-weight: bold;
+}
+.dict-result .example {
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+.mascot-chat-form {
+  display: flex;
+  margin-top: 15px;
+  gap: 8px;
+}
+.mascot-input {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 4px;
+  outline: none;
+}
+.mascot-input:focus {
+  border-color: var(--accent-color);
+}
+.mascot-submit {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.mascot-submit:hover {
+  opacity: 0.9;
+}

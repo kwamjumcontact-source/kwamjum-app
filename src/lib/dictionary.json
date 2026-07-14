@@ -1,0 +1,27 @@
+{
+  "apple": {
+    "pos": "Noun",
+    "meaning": "แอปเปิล (ผลไม้)",
+    "example": "I want to eat an apple."
+  },
+  "banana": {
+    "pos": "Noun",
+    "meaning": "กล้วย",
+    "example": "He slipped on a banana peel."
+  },
+  "run": {
+    "pos": "Verb",
+    "meaning": "วิ่ง, วิ่งหนี",
+    "example": "She likes to run in the morning."
+  },
+  "beautiful": {
+    "pos": "Adjective",
+    "meaning": "สวยงาม",
+    "example": "What a beautiful day!"
+  },
+  "hello": {
+    "pos": "Greeting",
+    "meaning": "สวัสดี",
+    "example": "Hello, how are you?"
+  }
+}
