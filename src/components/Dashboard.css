@@ -26,9 +26,11 @@
 .app-branding {
   color: var(--accent-color);
   font-weight: 800;
-  font-size: 18px;
-  letter-spacing: 2px;
+  font-size: 20px;
+  letter-spacing: 4px;
   text-transform: uppercase;
+  font-family: var(--font-mono);
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
 
 /* HERO CTA SECTION */
@@ -44,21 +46,24 @@
 }
 
 .cta-card {
-  background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(139,92,246,0.1) 100%);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
   padding: 40px;
   text-align: center;
   position: relative;
   overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.05);
 }
 
 .cta-card::before {
-  content: '';
+  content: '>';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at top right, rgba(139,92,246,0.15), transparent 50%);
-  pointer-events: none;
+  top: 10px; left: 15px;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+  opacity: 0.5;
+  font-size: 24px;
 }
 
 .cta-title {
@@ -80,32 +85,38 @@
 }
 
 .giant-start-btn {
-  background: var(--accent-color);
-  color: white;
-  border: none;
-  padding: 16px 40px;
-  font-size: 20px;
+  background: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 14px 40px;
+  font-size: 16px;
   font-weight: 700;
-  border-radius: 50px;
+  border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: var(--font-mono);
+  transition: all 0.2s ease;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
 }
 
 .giant-start-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 20px 35px -10px rgba(59, 130, 246, 0.6);
+  background: var(--accent-color);
+  color: #000;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
 }
 
 .giant-start-btn.secondary {
-  background: var(--card-bg);
-  color: var(--accent-color);
-  border: 2px solid var(--accent-color);
+  border-color: var(--text-secondary);
+  color: var(--text-secondary);
   box-shadow: none;
 }
 
 .giant-start-btn.secondary:hover {
-  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  background: transparent;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 /* GAMIFICATION & STATS GRID - 4 PANELS */
@@ -131,26 +142,28 @@
 .gamification-card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 20px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.2s;
   display: flex;
   flex-direction: column;
 }
 
-.stats-card:hover {
-  box-shadow: 0 10px 30px -15px rgba(0,0,0,0.3);
-  transform: translateY(-2px);
+.stats-card:hover, .gamification-card:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
 }
 
 .gamification-card h3 {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   margin-bottom: 15px;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .gamification-header {
@@ -168,10 +181,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(249, 115, 22, 0.1);
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(249, 115, 22, 0.2);
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--warning-color);
 }
 
 .fire-emoji {
@@ -192,10 +205,11 @@
 }
 
 .heatmap-wrapper {
-  background: var(--input-bg);
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
+  background: transparent;
+  padding: 12px 0;
+  border-radius: 0;
+  border-top: 1px dashed var(--border-color);
+  border-bottom: 1px dashed var(--border-color);
   overflow-x: auto;
   margin-bottom: 10px;
   flex: 1;
@@ -265,6 +279,7 @@
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
+  font-family: var(--font-mono);
 }
 
 .text-success {
@@ -439,26 +454,25 @@
 .modern-deck-card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 4px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .modern-deck-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
   background: var(--deck-color, var(--accent-color));
 }
 
 .modern-deck-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px -10px rgba(0,0,0,0.3);
-  border-color: rgba(255,255,255,0.2);
+  border-color: var(--deck-color, var(--accent-color));
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
 }
 
 .deck-card-header {
@@ -476,17 +490,18 @@
 }
 
 .deck-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--deck-color, var(--accent-color));
   border: 1px solid var(--border-color);
+  font-family: var(--font-mono);
 }
 
 .deck-mini-donut {
@@ -589,8 +604,8 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 50px;
-  background: var(--card-bg);
-  border-radius: 16px;
+  background: transparent;
   border: 1px dashed var(--border-color);
   color: var(--text-secondary);
+  font-family: var(--font-mono);
 }
