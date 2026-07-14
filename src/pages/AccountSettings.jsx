@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { getProfile, updateProfile, getDecks, getCardsForDeck, getReviewLogs } from '../lib/db';
 import { useNavigate } from 'react-router-dom';
+import { SignOut as SignOutIcon, Package, Flame, Brain, Medal } from '@phosphor-icons/react';
 import './AccountSettings.css';
 
 const AVATARS = ['🐶', '🐱', '🐼', '🦊', '🐧', '🐨', '🐯', '🦁', '🐵', '🐸', '🦄', '🐙'];
@@ -215,21 +216,21 @@ const AccountSettings = () => {
         <div className="account-section">
           <h3>Achievements</h3>
           <div className="achievements-grid" style={{ marginTop: '15px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '15px' }}>
-            <div className={`achievement-badge ${decksCount > 0 ? 'unlocked gold' : 'locked'}`} title="Create your first deck" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
-              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>📦</div>
-              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>First Deck</span>
+            <div className={`achievement-badge ${decksCount > 0 ? 'unlocked gold' : 'locked'}`} title="Create your first deck" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '12px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ marginBottom: '10px', color: decksCount > 0 ? '#F59E0B' : 'var(--text-secondary)' }}><Package size={32} weight="duotone" /></div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: '600' }}>First Deck</span>
             </div>
-            <div className={`achievement-badge ${profile.current_streak > 0 ? 'unlocked orange' : 'locked'}`} title="Get your first streak" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
-              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>🔥</div>
-              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>First Streak</span>
+            <div className={`achievement-badge ${profile.current_streak > 0 ? 'unlocked orange' : 'locked'}`} title="Get your first streak" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '12px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ marginBottom: '10px', color: profile.current_streak > 0 ? '#EA580C' : 'var(--text-secondary)' }}><Flame size={32} weight="duotone" /></div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: '600' }}>First Streak</span>
             </div>
-            <div className={`achievement-badge ${masteredCardsCount >= 10 ? 'unlocked green' : 'locked'}`} title="Master 10 cards" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
-              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>🧠</div>
-              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>Master 10</span>
+            <div className={`achievement-badge ${masteredCardsCount >= 10 ? 'unlocked green' : 'locked'}`} title="Master 10 cards" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '12px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ marginBottom: '10px', color: masteredCardsCount >= 10 ? '#10B981' : 'var(--text-secondary)' }}><Brain size={32} weight="duotone" /></div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: '600' }}>Master 10</span>
             </div>
-            <div className={`achievement-badge ${totalStudiedCount >= 100 ? 'unlocked blue' : 'locked'}`} title="Complete 100 reviews" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
-              <div className="badge-icon" style={{ fontSize: '30px', marginBottom: '10px' }}>💯</div>
-              <span className="badge-name" style={{ display: 'block', fontWeight: 'bold' }}>Centurion</span>
+            <div className={`achievement-badge ${totalStudiedCount >= 100 ? 'unlocked blue' : 'locked'}`} title="Complete 100 reviews" style={{ background: 'var(--hover-bg)', padding: '15px', borderRadius: '12px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+              <div className="badge-icon" style={{ marginBottom: '10px', color: totalStudiedCount >= 100 ? '#3B82F6' : 'var(--text-secondary)' }}><Medal size={32} weight="duotone" /></div>
+              <span className="badge-name" style={{ display: 'block', fontWeight: '600' }}>Centurion</span>
             </div>
           </div>
         </div>
@@ -310,19 +311,28 @@ const AccountSettings = () => {
             <button 
               onClick={signOut}
               style={{
-                background: 'rgba(244, 63, 94, 0.1)',
-                color: '#f43f5e',
-                border: '1px solid #f43f5e',
+                background: 'rgba(220, 38, 38, 0.1)',
+                color: '#DC2626',
+                border: '1px solid #DC2626',
                 padding: '10px 20px',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                fontWeight: 'bold',
+                fontWeight: '600',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '8px',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#DC2626';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(220, 38, 38, 0.1)';
+                e.currentTarget.style.color = '#DC2626';
               }}
             >
-              🚪 Log Out
+              <SignOutIcon size={20} weight="bold" /> Log Out
             </button>
           </div>
         </div>

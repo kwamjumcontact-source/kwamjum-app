@@ -1,32 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Josefin+Sans:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-color: #050505; /* Pitch black */
-  --text-primary: #e2e8f0;
-  --text-secondary: #64748b;
-  --card-bg: #111113; /* Solid dark grey */
-  --font-main: 'Libre Baskerville', serif;
+  /* Light Mode (Default) - Clean, Minimal SaaS */
+  --bg-color: #F8FAFC; 
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --card-bg: #FFFFFF;
+  --font-main: 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-header: 'Josefin Sans', sans-serif;
-  --accent-color: #06b6d4; /* Cyber Cyan */
-  --success-color: #10b981; /* Terminal Green */
-  --warning-color: #eab308;
-  --danger-color: #ef4444;
-  --border-color: #27272a;
-  --hover-bg: #18181b;
-  --input-bg: #09090b;
-  --ui-border: 2px;
+  --font-header: 'Plus Jakarta Sans', sans-serif;
+  
+  --primary-color: #0D9488;
+  --primary-hover: #0F766E;
+  --accent-color: #0D9488; /* Keep old variable name for compatibility */
+  
+  --success-color: #059669;
+  --warning-color: #D97706;
+  --danger-color: #DC2626;
+  --border-color: #E2E8F0;
+  --hover-bg: #F1F5F9;
+  --input-bg: #FFFFFF;
+  --ui-border: 1px;
 }
 
-[data-theme="light"] {
-  --bg-color: #e2e8f0; /* Muted background */
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --card-bg: #f1f5f9; /* Less blinding than white */
-  --border-color: #94a3b8; /* Darker bolder borders */
-  --hover-bg: #cbd5e1;
-  --input-bg: #ffffff;
-  --accent-color: #0284c7; 
+[data-theme="dark"] {
+  /* Dark Mode - Deep Slate, Modern Sleek */
+  --bg-color: #0F172A; 
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --card-bg: #1E293B; 
+  --border-color: #334155; 
+  --hover-bg: #0F172A;
+  --input-bg: #0F172A;
+  --accent-color: #2DD4BF; 
+  --primary-color: #2DD4BF;
+  --primary-hover: #14B8A6;
 }
 
 [data-font-size="small"] {

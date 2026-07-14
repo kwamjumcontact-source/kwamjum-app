@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Books, PencilSimple, Plus } from '@phosphor-icons/react';
 import './LibraryView.css';
 
 const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy }) => {
@@ -37,14 +38,18 @@ const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="primary-btn" onClick={onNewDeck}>+ Create Deck</button>
+          <button className="primary-btn" onClick={onNewDeck}>
+            <Plus size={20} weight="bold" /> Create Deck
+          </button>
         </div>
       </div>
 
       <div className="library-content">
         {Object.keys(categories).length === 0 ? (
           <div className="empty-library">
-            <div className="empty-illustration">📚</div>
+            <div className="empty-illustration">
+              <Books size={64} weight="duotone" color="var(--primary-color)" />
+            </div>
             <h3>No decks found</h3>
             <p>Create a new deck to start learning, or try a different search term.</p>
           </div>
@@ -57,7 +62,9 @@ const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy }) => {
                   <div key={deck.id} className="deck-card" onClick={() => startStudy(deck.id)}>
                     <div className="deck-card-header" style={{ borderBottomColor: deck.color }}>
                       <h3>{deck.title}</h3>
-                      <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }}>✏️</button>
+                      <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }}>
+                        <PencilSimple size={20} />
+                      </button>
                     </div>
                     <p className="deck-description">{deck.description || "No description"}</p>
                     <div className="deck-stats">

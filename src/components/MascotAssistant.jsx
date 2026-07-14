@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Translate, PlayCircle, Flame } from '@phosphor-icons/react';
 import './MascotAssistant.css';
 
 // We will fetch the large dictionary dynamically to avoid bundling a 5MB JSON file.
@@ -235,7 +236,7 @@ const MascotAssistant = ({ currentView, streak, totalStudied, userName, decks, s
       <div className="mascot-wrapper">
         <div className="mascot-character" onClick={handleMascotClick}>
           <img src="/mascot.jpg" alt="Mascot" className="mascot-img" />
-          {streak > 3 && <div className="mascot-badge">🔥</div>}
+          {streak > 3 && <div className="mascot-badge"><Flame size={16} weight="fill" color="#EA580C" /></div>}
         </div>
           
         {/* Radial Menu */}
@@ -246,14 +247,14 @@ const MascotAssistant = ({ currentView, streak, totalStudied, userName, decks, s
               onClick={(e) => { e.stopPropagation(); setChatMode(true); setMessage('พิมพ์คำศัพท์ที่อยากให้ผมแปลได้เลยครับ! 🤖'); }}
               title="Translate"
             >
-              T
+              <Translate size={20} />
             </button>
             <button 
               className="radial-btn btn-study" 
               onClick={handleStudyFirstDeck}
               title="Study First Deck"
             >
-              S
+              <PlayCircle size={20} />
             </button>
           </div>
         )}

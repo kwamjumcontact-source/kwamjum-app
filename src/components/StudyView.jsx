@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Flashcard from './Flashcard';
 import { calculateNextIntervals, formatTime, processReview } from '../lib/anki';
+import { Confetti, HourglassHigh, FastForward } from '@phosphor-icons/react';
 import './StudyView.css';
 
 const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRating, onFinish }) => {
@@ -98,7 +99,8 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
     return (
       <div className="study-view-container empty-state">
         <div className="completion-card">
-          <h2>🎉 You're all caught up!</h2>
+          <Confetti size={64} weight="duotone" color="var(--primary-color)" style={{ marginBottom: '16px' }} />
+          <h2>You're all caught up!</h2>
           <p>No more cards due for <strong>{deck.title}</strong> right now.</p>
           <button className="finish-btn" onClick={handleFinish}>Return to Dashboard</button>
         </div>
@@ -111,7 +113,8 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
     return (
       <div className="study-view-container finished-state">
         <div className="completion-card">
-          <h2>🎉 Session Complete!</h2>
+          <Confetti size={64} weight="duotone" color="var(--success-color)" style={{ marginBottom: '16px' }} />
+          <h2>Session Complete!</h2>
           <p>Great job studying <strong>{deck.title}</strong>.</p>
           <p>You have graduated all cards for today.</p>
           <button className="finish-btn" onClick={handleFinish}>Complete & Update Streak</button>
@@ -129,19 +132,22 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
     return (
       <div className="study-view-container waiting-state">
         <div className="completion-card">
-          <h2>⏳ Waiting for Cards...</h2>
+          <HourglassHigh size={64} weight="duotone" color="var(--warning-color)" style={{ marginBottom: '16px' }} />
+          <h2>Waiting for Cards...</h2>
           <p>The next card is in a learning step and will be ready in:</p>
           <div className="wait-timer">{displayWait}</div>
           <div className="wait-actions">
             <button className="finish-btn outline" onClick={handleFinish}>Finish for Now</button>
-            <button className="finish-btn" onClick={() => {
+            <button className="finish-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => {
               // Study ahead: artificially set dueTime to now
               setQueue(q => {
                 const newQ = [...q];
                 newQ[0].localDueTime = Date.now();
                 return newQ;
               });
-            }}>Study Ahead</button>
+            }}>
+              <FastForward size={20} weight="fill" /> Study Ahead
+            </button>
           </div>
         </div>
       </div>

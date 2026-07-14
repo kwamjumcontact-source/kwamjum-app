@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
+import { PlayCircle, Plus, Flame } from '@phosphor-icons/react';
 
 import ActivityHeatmap from './ActivityHeatmap';
 import './Dashboard.css';
@@ -85,9 +86,9 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
                   <h2 className="cta-title">
                     You have <span className="highlight-text">{totalDueCards}</span> {totalDueCards === 1 ? 'card' : 'cards'} due today.
                   </h2>
-                  <p className="cta-subtitle">Finish this to keep your {streak}-day streak alive! 🔥</p>
+                  <p className="cta-subtitle">Finish this to keep your {streak}-day streak alive!</p>
                   <button className="giant-start-btn" onClick={handleStartReview}>
-                    ▶ Start Review
+                    <PlayCircle size={24} weight="fill" /> Start Review
                   </button>
                 </>
               ) : (
@@ -95,7 +96,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
                   <h2 className="cta-title">You're all caught up! 🎉</h2>
                   <p className="cta-subtitle">Great job! Master your skills today by creating a new deck.</p>
                   <button className="giant-start-btn secondary" onClick={onNewDeck}>
-                    + Create New Deck
+                    <Plus size={24} weight="bold" /> Create New Deck
                   </button>
                 </>
               )}
@@ -112,7 +113,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
             <div className="gamification-header">
               <h3>Activity & Streak</h3>
               <div className="streak-badge-fire">
-                <span className="fire-emoji">🔥</span>
+                <Flame size={24} weight="fill" color="#D97706" />
                 <span className="streak-number">{streak}</span>
                 <span className="streak-text">Days</span>
               </div>

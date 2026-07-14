@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { ChartBar, Books, ChartLineUp, Sun, Moon, ChatCircleText, Gear, List, X } from '@phosphor-icons/react';
 import './Sidebar.css';
 
 const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isOpenOnMobile, onCloseMobile }) => {
@@ -36,7 +37,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
       <div className={`permanent-sidebar ${isEffectivelyCollapsed ? 'collapsed' : ''} ${isOpenOnMobile ? 'mobile-open' : ''}`}>
       <div className="sidebar-brand">
         <button className="collapse-btn" onClick={isOpenOnMobile ? onCloseMobile : onToggle}>
-          {isOpenOnMobile ? '✕' : '☰'}
+          {isOpenOnMobile ? <X size={24} /> : <List size={24} />}
         </button>
         {!isEffectivelyCollapsed && <h2>Kwamjum</h2>}
       </div>
@@ -47,7 +48,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           onClick={() => handleNavClick('dashboard')}
           title="Overview"
         >
-          <span className="nav-icon">📊</span>
+          <span className="nav-icon"><ChartBar size={22} weight={currentView === 'dashboard' ? 'fill' : 'regular'} /></span>
           {!isEffectivelyCollapsed && "Overview"}
         </button>
         
@@ -56,7 +57,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           onClick={() => handleNavClick('library')}
           title="My Decks"
         >
-          <span className="nav-icon">📚</span>
+          <span className="nav-icon"><Books size={22} weight={currentView === 'library' ? 'fill' : 'regular'} /></span>
           {!isEffectivelyCollapsed && "My Decks"}
         </button>
 
@@ -65,7 +66,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           onClick={() => handleNavClick('stats')}
           title="Statistics"
         >
-          <span className="nav-icon">📈</span>
+          <span className="nav-icon"><ChartLineUp size={22} weight={currentView === 'stats' ? 'fill' : 'regular'} /></span>
           {!isEffectivelyCollapsed && "Statistics"}
         </button>
       </div>
@@ -76,7 +77,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           title="Toggle Theme"
           onClick={toggleTheme}
         >
-          <span className="nav-icon">{theme === 'light' ? '☀️' : '🌙'}</span>
+          <span className="nav-icon">{theme === 'light' ? <Sun size={22} weight="fill" /> : <Moon size={22} weight="fill" />}</span>
           {!isEffectivelyCollapsed && (theme === 'light' ? 'Light Mode' : 'Dark Mode')}
         </button>
         <button 
@@ -84,7 +85,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           title="Send Feedback"
           onClick={() => navigate('/help')}
         >
-          <span className="nav-icon">💬</span>
+          <span className="nav-icon"><ChatCircleText size={22} /></span>
           {!isEffectivelyCollapsed && "Send Feedback"}
         </button>
 
@@ -94,7 +95,7 @@ const Sidebar = ({ currentView, setCurrentView, user, isCollapsed, onToggle, isO
           onClick={() => navigate('/account')}
           style={{ marginBottom: '20px' }}
         >
-          <span className="nav-icon">⚙️</span>
+          <span className="nav-icon"><Gear size={22} /></span>
           {!isEffectivelyCollapsed && "Settings"}
         </button>
         
