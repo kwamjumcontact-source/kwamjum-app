@@ -1,24 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './HelpFeedback.css';
 
 const HelpFeedback = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [feedback, setFeedback] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!feedback.trim()) return;
     
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await fetch("https://formsubmit.co/ajax/kwamjum.contact@gmail.com", {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Kwamjum User",
+            email: user?.email || "no-reply@kwamjum.com",
+            message: feedback,
+            _subject: "New Feedback from Kwamjum App"
+        })
+      });
       setSubmitted(true);
       setFeedback('');
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to send feedback. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
