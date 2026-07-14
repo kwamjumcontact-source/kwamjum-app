@@ -118,7 +118,7 @@ const MainApp = () => {
       await saveCardReview(cardId, {
         repetitions,
         ease: parseFloat(ease.toFixed(2)),
-        interval: Math.round(finalInterval), // Round to integer to prevent Postgres float-to-int errors
+        interval: finalInterval,
         due_date: newDueDate.toISOString()
       });
       // We will not call fetchData() here to avoid resetting StudyView's internal state.

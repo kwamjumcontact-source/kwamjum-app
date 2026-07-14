@@ -43,21 +43,15 @@ export function calculateNextIntervals(card) {
       good: 10, // 10m
       easy: 4 * 24 * 60 // 4d
     };
-  } else if (currentIntervalMins < 1440) { // Less than 1 day
-    // Phase: Learning / Relearning
-    return {
-      again: 1, // 1m
-      hard: 10, // 10m
-      good: 1440, // 1d
-      easy: 4 * 24 * 60 // 4d
-    };
   } else {
-    // Phase: Graduated (SM-2)
+    // Phase: Graduated (Dynamic SM-2 Expansion)
+    // Ensures the user sees the time expanding dynamically on every press!
+    // Minimum hard interval is 1.2x, good is 2.5x
     return {
-      again: 10, // 10m (Relearn)
-      hard: currentIntervalMins * 1.2,
-      good: currentIntervalMins * ease,
-      easy: currentIntervalMins * ease * 1.3
+      again: 1, // Relearn starts back at 1m
+      hard: Math.max(currentIntervalMins * 1.2, currentIntervalMins + 5),
+      good: Math.max(currentIntervalMins * ease, 1440), // Jump to 1 day minimum for Good!
+      easy: Math.max(currentIntervalMins * ease * 1.3, 4 * 1440) // Jump to 4 days minimum for Easy
     };
   }
 }
@@ -73,9 +67,9 @@ export function processReview(card, rating) {
   const intervals = calculateNextIntervals(card);
   const nextIntervalMins = intervals[rating];
   
-  // Calculate new Ease (only changes for Graduated cards, or drops heavily on Again)
+  // Calculate new Ease (drops on Again/Hard, increases on Easy)
   let newEase = ease;
-  if (currentIntervalMins >= 1440) { // Graduated
+  if (repetitions > 0) {
     if (rating === 'again') {
       newEase -= 0.20;
     } else if (rating === 'hard') {
