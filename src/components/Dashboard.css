@@ -47,7 +47,7 @@
 
 .cta-card {
   background: var(--card-bg);
-  border: 1px solid var(--accent-color);
+  border: var(--ui-border) solid var(--accent-color);
   border-radius: 4px;
   padding: 40px;
   text-align: center;
@@ -141,7 +141,7 @@
 
 .gamification-card {
   background: var(--card-bg);
-  border: 1px solid var(--border-color);
+  border: var(--ui-border) solid var(--border-color);
   border-radius: 4px;
   padding: 20px;
   transition: all 0.2s;
@@ -357,7 +357,7 @@
   padding: 10px;
   border-radius: 12px;
   background: var(--input-bg);
-  border: 1px solid var(--border-color);
+  border: var(--ui-border) solid var(--border-color);
   text-align: center;
   transition: transform 0.2s;
 }
@@ -453,7 +453,7 @@
 
 .modern-deck-card {
   background: var(--card-bg);
-  border: 1px solid var(--border-color);
+  border: var(--ui-border) solid var(--border-color);
   border-radius: 4px;
   overflow: hidden;
   display: flex;

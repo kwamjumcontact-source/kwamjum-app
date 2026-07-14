@@ -14,17 +14,19 @@
   --border-color: #27272a;
   --hover-bg: #18181b;
   --input-bg: #09090b;
+  --ui-border: 1px;
 }
 
 [data-theme="light"] {
-  --bg-color: #f1f5f9;
+  --bg-color: #e2e8f0; /* Muted background */
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --card-bg: #ffffff;
-  --border-color: #cbd5e1;
-  --hover-bg: #e2e8f0;
-  --input-bg: #f8fafc;
+  --card-bg: #f1f5f9; /* Less blinding than white */
+  --border-color: #94a3b8; /* Darker bolder borders */
+  --hover-bg: #cbd5e1;
+  --input-bg: #ffffff;
   --accent-color: #0284c7; 
+  --ui-border: 2px; /* Thicker borders for light mode */
 }
 
 [data-font-size="small"] {
