@@ -7,37 +7,8 @@ const HelpFeedback = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [feedback, setFeedback] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!feedback.trim()) return;
-    
-    setIsSubmitting(true);
-    try {
-      await fetch("https://formsubmit.co/ajax/kwamjum.contact@gmail.com", {
-        method: "POST",
-        headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Kwamjum User",
-            email: user?.email || "no-reply@kwamjum.com",
-            message: feedback,
-            _subject: "New Feedback from Kwamjum App"
-        })
-      });
-      setSubmitted(true);
-      setFeedback('');
-    } catch (error) {
-      console.error(error);
-      alert("Failed to send feedback. Please try again later.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  // We use standard HTML form submission to FormSubmit so that the initial activation UI works.
+  const handleFeedbackChange = (e) => setFeedback(e.target.value);
 
   return (
     <div className="help-page">
@@ -87,28 +58,23 @@ const HelpFeedback = () => {
           <h2>Send Feedback</h2>
           <p className="feedback-desc">Have a suggestion or found a bug? Let us know!</p>
           
-          {submitted ? (
-            <div className="feedback-success">
-              <span className="success-icon">✅</span>
-              <p>Thank you for your feedback! We'll look into it.</p>
-              <button className="reset-feedback-btn" onClick={() => setSubmitted(false)}>
-                Send another message
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="feedback-form">
-              <textarea 
-                placeholder="Tell us what you think..." 
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                rows="5"
-                required
-              />
-              <button type="submit" className="submit-feedback-btn" disabled={isSubmitting || !feedback.trim()}>
-                {isSubmitting ? 'Sending...' : 'Send Feedback'}
-              </button>
-            </form>
-          )}
+          <form action="https://formsubmit.co/kwamjum.contact@gmail.com" method="POST" target="_blank" className="feedback-form">
+            <input type="hidden" name="_subject" value="New Feedback from Kwamjum App" />
+            <input type="hidden" name="email" value={user?.email || "no-reply@kwamjum.com"} />
+            <input type="hidden" name="name" value={user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Kwamjum User"} />
+            
+            <textarea 
+              name="message"
+              placeholder="Tell us what you think..." 
+              value={feedback}
+              onChange={handleFeedbackChange}
+              rows="5"
+              required
+            />
+            <button type="submit" className="submit-feedback-btn" disabled={!feedback.trim()}>
+              Send Feedback
+            </button>
+          </form>
         </div>
       </div>
     </div>
