@@ -117,3 +117,14 @@
     display: none;
   }
 }
+
+.permanent-sidebar { transition: width 0.3s ease; overflow-x: hidden; }
+.permanent-sidebar.collapsed { width: 80px; align-items: center; }
+.sidebar-brand { display: flex; align-items: center; gap: 15px; }
+.collapse-btn { background: transparent; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; padding: 5px; }
+.collapse-btn:hover { color: var(--accent-color); }
+.permanent-sidebar.collapsed .nav-btn { padding: 12px; justify-content: center; }
+.permanent-sidebar.collapsed .sidebar-brand { justify-content: center; margin-bottom: 40px; }
+.permanent-sidebar.collapsed .sidebar-footer { padding-top: 20px; }
+.permanent-sidebar.collapsed .feedback-btn { margin-bottom: 20px; justify-content: center; }
+.feedback-btn { margin-bottom: 20px; }

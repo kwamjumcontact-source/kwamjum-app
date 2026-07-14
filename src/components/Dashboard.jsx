@@ -74,10 +74,6 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
       
       
       <div className="dashboard-container">
-        <header className="dashboard-header-simple">
-          <button className="hamburger-btn" onClick={() => setIsMenuOpen(true)}>☰</button>
-          <div className="app-branding">Kwamjum</div>
-        </header>
 
         {/* HERO CTA SECTION */}
         <section className="hero-cta-section">

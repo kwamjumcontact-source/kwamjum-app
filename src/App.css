@@ -135,3 +135,6 @@
 .app-layout-wrapper { display: flex; min-height: 100vh; background-color: var(--bg-color); }
 .main-content-area { flex-grow: 1; margin-left: 250px; position: relative; }
 @media (max-width: 768px) { .main-content-area { margin-left: 0; padding-bottom: 60px; } }
+
+.main-content-area { transition: margin-left 0.3s ease; }
+.main-content-area.sidebar-collapsed { margin-left: 80px !important; }

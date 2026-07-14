@@ -16,6 +16,7 @@ const MainApp = () => {
   
   const [currentView, setCurrentView] = useState('dashboard');
   const [activeDeckId, setActiveDeckId] = useState(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   
   // Database State
   const [decks, setDecks] = useState([]);
@@ -176,14 +177,16 @@ const MainApp = () => {
   const activeDeck = decks.find(d => d.id === activeDeckId);
 
   return (
-    <div className="app-layout-wrapper" >
+    <div className="app-layout-wrapper" style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-color)' }}>
       <Sidebar 
         currentView={currentView} 
         setCurrentView={setCurrentView} 
         user={user} 
+        isCollapsed={isSidebarCollapsed}
+        onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
       
-      <div className="main-content-area" >
+      <div className={`main-content-area ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
         {currentView === 'dashboard' && (
           <Dashboard 
             decks={decks}
