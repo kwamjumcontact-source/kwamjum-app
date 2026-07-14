@@ -1,9 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import { Books, PencilSimple, Plus } from '@phosphor-icons/react';
+import React, { useState, useMemo, useRef } from 'react';
+import { Books, PencilSimple, Plus, UploadSimple, DownloadSimple } from '@phosphor-icons/react';
 import './LibraryView.css';
 
-const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy }) => {
+const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy, onExportDeck, onImportDeck }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && onImportDeck) {
+      onImportDeck(file);
+    }
+    // Reset input so the same file can be selected again
+    e.target.value = null;
+  };
 
   // Group decks by category
   const categories = useMemo(() => {
@@ -38,6 +48,16 @@ const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            style={{ display: 'none' }} 
+            accept=".json,.csv"
+          />
+          <button className="secondary-btn" onClick={() => fileInputRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--card-bg)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: '600' }}>
+            <UploadSimple size={20} weight="bold" /> Import
+          </button>
           <button className="primary-btn" onClick={onNewDeck}>
             <Plus size={20} weight="bold" /> Create Deck
           </button>
@@ -62,9 +82,14 @@ const LibraryView = ({ decks, onNewDeck, onEditDeck, startStudy }) => {
                   <div key={deck.id} className="deck-card" onClick={() => startStudy(deck.id)}>
                     <div className="deck-card-header" style={{ borderBottomColor: deck.color }}>
                       <h3>{deck.title}</h3>
-                      <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }}>
-                        <PencilSimple size={20} />
-                      </button>
+                      <div className="deck-actions" style={{ display: 'flex', gap: '5px' }}>
+                        <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onExportDeck && onExportDeck(deck.id); }} title="Export Deck">
+                          <DownloadSimple size={20} />
+                        </button>
+                        <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onEditDeck(deck); }} title="Edit Deck">
+                          <PencilSimple size={20} />
+                        </button>
+                      </div>
                     </div>
                     <p className="deck-description">{deck.description || "No description"}</p>
                     <div className="deck-stats">

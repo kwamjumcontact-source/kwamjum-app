@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, deleteCard, saveCardReview, logReview, getReviewLogs, getProfile, updateStreak } from '../lib/db';
+import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, deleteCard, saveCardReview, logReview, getReviewLogs, getProfile, updateStreak, exportDeck, importDeck } from '../lib/db';
 import Dashboard from '../components/Dashboard';
 import LibraryView from '../components/LibraryView';
 import Sidebar from '../components/Sidebar';
@@ -175,6 +175,45 @@ const MainApp = () => {
     }
   };
 
+  const handleExportDeck = async (deckId) => {
+    try {
+      const data = await exportDeck(deckId);
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${data.deck.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_export.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Export failed:", e);
+      alert("Failed to export deck");
+    }
+  };
+
+  const handleImportDeck = async (file) => {
+    try {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const content = e.target.result;
+          await importDeck(user.id, content, file.name);
+          fetchData(); 
+          alert("Deck imported successfully!");
+        } catch (err) {
+          console.error("Import failed:", err);
+          alert("Failed to import deck: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    } catch (err) {
+      console.error("File read failed:", err);
+    }
+  };
+
   // Render Views
   if (loading) {
     return <div style={{color:'white', display:'flex', justifyContent:'center', alignItems:'center', height:'100vh'}}>Loading your decks...</div>;
@@ -221,6 +260,8 @@ const MainApp = () => {
             onNewDeck={() => { setEditingDeck(null); setIsEditorOpen(true); }}
             onEditDeck={(deck) => { setEditingDeck(deck); setIsEditorOpen(true); }}
             startStudy={(id) => { setActiveDeckId(id); setCurrentView('study'); }}
+            onExportDeck={handleExportDeck}
+            onImportDeck={handleImportDeck}
           />
         )}
 

@@ -274,3 +274,84 @@ export const updateStreak = async (userId) => {
     return null;
   }
 };
+
+// --- Import / Export ---
+
+export const exportDeck = async (deckId) => {
+  const { data: deck, error: deckError } = await supabase
+    .from('decks')
+    .select('*')
+    .eq('id', deckId)
+    .single();
+    
+  if (deckError) throw deckError;
+  
+  const { data: cards, error: cardsError } = await supabase
+    .from('cards')
+    .select('*')
+    .eq('deck_id', deckId);
+    
+  if (cardsError) throw cardsError;
+  
+  return { deck, cards };
+};
+
+export const importDeck = async (userId, fileContent, filename = "Imported Deck") => {
+  let deckData = null;
+  let cardsData = [];
+  
+  try {
+    // Try to parse as JSON first
+    const parsed = JSON.parse(fileContent);
+    if (parsed.deck && parsed.cards) {
+      deckData = parsed.deck;
+      cardsData = parsed.cards;
+    } else {
+      throw new Error("Invalid JSON structure");
+    }
+  } catch (e) {
+    // Fallback to CSV
+    const lines = fileContent.split('\n').filter(line => line.trim() !== '');
+    deckData = { title: filename.replace('.csv', ''), description: '[Imported] Imported from CSV', color: '#10B981' };
+    
+    cardsData = lines.map(line => {
+      // Basic CSV parsing (not handling quotes properly, but fine for simple cases)
+      const parts = line.split(',');
+      return {
+        front: parts[0]?.trim() || '',
+        back: parts.slice(1).join(',')?.trim() || ''
+      };
+    });
+  }
+  
+  if (cardsData.length === 0) throw new Error("No cards found to import");
+  
+  // Create the deck
+  const newDeck = await createDeck(
+    userId, 
+    deckData.title + " (Imported)", 
+    deckData.raw_description || deckData.description || "Imported deck", 
+    deckData.color || '#3B82F6', 
+    deckData.category || 'General'
+  );
+  
+  // Prepare cards for bulk insert
+  const cardsToInsert = cardsData.map(card => ({
+    user_id: userId,
+    deck_id: newDeck.id,
+    front: card.front,
+    back: card.back,
+    image_url: card.image_url || null,
+    type: card.type || 'basic',
+    repetitions: 0,
+    ease: 2.5,
+    interval: 0,
+    due_date: new Date().toISOString()
+  }));
+  
+  // Bulk insert
+  const { error } = await supabase.from('cards').insert(cardsToInsert);
+  if (error) throw error;
+  
+  return newDeck;
+};
