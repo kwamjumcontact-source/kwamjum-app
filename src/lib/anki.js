@@ -1,11 +1,11 @@
 // Anki-style Algorithm with Learning Steps
 
 /**
- * Helper to convert minutes into human-readable strings (e.g., "10m", "1d", "1.5mo")
+ * Helper to convert minutes into human-readable strings (e.g., "10m", "1d", "2mo")
  */
 export function formatTime(minutes) {
   if (minutes < 60) {
-    return `< ${Math.max(1, Math.round(minutes))}m`;
+    return `${Math.max(1, Math.round(minutes))}m`;
   }
   
   const hours = minutes / 60;
@@ -15,16 +15,16 @@ export function formatTime(minutes) {
   
   const days = hours / 24;
   if (days < 30) {
-    return `${Math.round(days * 10) / 10}d`;
+    return `${Math.round(days)}d`;
   }
   
   const months = days / 30;
   if (months < 12) {
-    return `${Math.round(months * 10) / 10}mo`;
+    return `${Math.round(months)}mo`;
   }
   
   const years = months / 12;
-  return `${Math.round(years * 10) / 10}y`;
+  return `${Math.round(years)}y`;
 }
 
 /**
