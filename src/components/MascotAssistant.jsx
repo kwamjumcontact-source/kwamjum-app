@@ -57,30 +57,40 @@ const MascotAssistant = ({ currentView, streak, totalStudied }) => {
     }
   };
 
-  const handleTranslate = (e) => {
+  const handleTranslate = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
     
     const word = inputText.trim().toLowerCase();
     
-    // Check if it's a sentence (simple check: spaces)
-    if (word.split(' ').length > 2) {
-      setMessage(`ตอนนี้ผมแปลได้ทีละคำ (Dictionary) ครับ ลองพิมพ์คำสั้นๆ ดูก่อนนะ!`);
-      setInputText('');
-      return;
-    }
-
-    const result = dictionary[word];
-    if (result) {
+    const localResult = dictionary[word];
+    if (localResult) {
       setMessage(
         <div className="dict-result">
-          <strong>{word}</strong> <span className="pos">({result.pos})</span>
-          <p className="meaning">แปลว่า: {result.meaning}</p>
-          <p className="example">" {result.example} "</p>
+          <strong>{word}</strong> <span className="pos">({localResult.pos})</span>
+          <p className="meaning">แปลว่า: {localResult.meaning}</p>
+          <p className="example">" {localResult.example} "</p>
         </div>
       );
     } else {
-      setMessage(`❌ ขออภัยครับ ผมยังไม่รู้จักคำว่า "${word}"`);
+      // Fallback to Google Translate API
+      setMessage(`กำลังค้นหาคำว่า "${word}"... 🔍`);
+      try {
+        const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=th&dt=t&q=${encodeURIComponent(word)}`);
+        const data = await response.json();
+        const translatedText = data[0][0][0];
+        
+        setMessage(
+          <div className="dict-result">
+            <strong>{word}</strong> <span className="pos">(Auto)</span>
+            <p className="meaning">แปลว่า: {translatedText}</p>
+            <p className="example" style={{fontSize: '0.75rem', marginTop: '10px'}}>*แปลด้วย Google Translate</p>
+          </div>
+        );
+      } catch (err) {
+        console.error("Translation error", err);
+        setMessage(`❌ ขออภัยครับ ผมค้นหาคำว่า "${word}" ไม่สำเร็จ ลองใหม่อีกครั้งนะ`);
+      }
     }
     
     setInputText('');
