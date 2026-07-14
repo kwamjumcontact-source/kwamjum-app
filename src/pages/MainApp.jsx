@@ -68,13 +68,6 @@ const MainApp = () => {
     fetchData();
   }, [user, currentDate, fetchData]);
 
-  // Refresh data when returning to dashboard to ensure due counts are accurate
-  useEffect(() => {
-    if (currentView === 'dashboard') {
-      fetchData();
-    }
-  }, [currentView, fetchData]);
-
   // SM-2 Algorithm Integration (Anki Style)
   const handleRating = async (cardId, rating) => {
     const deck = decks.find(d => d.id === activeDeckId);
@@ -90,6 +83,27 @@ const MainApp = () => {
     // Calculate new due date based on simulated currentDate
     // interval is returned in DAYS from processReview
     const newDueDate = new Date(currentDate.getTime() + finalInterval * 24 * 60 * 60 * 1000);
+
+    // Optimistically update the decks state immediately to prevent race conditions
+    setDecks(prevDecks => prevDecks.map(d => {
+      if (d.id === activeDeckId) {
+        const updatedCards = d.cards.map(c => {
+          if (c.id === cardId) {
+            return {
+              ...c,
+              repetitions,
+              ease: parseFloat(ease.toFixed(2)),
+              interval: finalInterval,
+              due_date: newDueDate.toISOString()
+            };
+          }
+          return c;
+        });
+        const dueToday = updatedCards.filter(c => new Date(c.due_date) <= currentDate).length;
+        return { ...d, cards: updatedCards, dueToday };
+      }
+      return d;
+    }));
 
     // Save to Supabase
     try {
