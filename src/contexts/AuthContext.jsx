@@ -24,28 +24,50 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
+    // Safety timeout: Ensure loading state is never stuck true for more than 3 seconds
+    const safetyTimer = setTimeout(() => {
+      if (isMounted) setLoading(false);
+    }, 3000);
+
     // Check active sessions and sets the user
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id).then(() => setLoading(false));
-      } else {
-        setLoading(false);
-      }
-    });
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        if (!isMounted) return;
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchProfile(session.user.id).finally(() => {
+            if (isMounted) setLoading(false);
+          });
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Error getting session:", err);
+        if (isMounted) setLoading(false);
+      });
 
     // Listen for changes on auth state (logged in, signed out, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!isMounted) return;
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id).then(() => setLoading(false));
+        fetchProfile(session.user.id).finally(() => {
+          if (isMounted) setLoading(false);
+        });
       } else {
         setUserProfile(null);
         setLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      clearTimeout(safetyTimer);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = (email, password, metadata) => {
@@ -82,7 +104,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, userProfile, updateProfileContext, signUp, signIn, signOut, resetPassword, updatePassword, loading }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
