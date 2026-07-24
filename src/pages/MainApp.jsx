@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { getDecks, getCardsForDeck, createDeck, updateDeck, deleteDeck, createCard, deleteCard, saveCardReview, logReview, getReviewLogs, getProfile, updateStreak, exportDeck, importDeck } from '../lib/db';
+import { useToast } from '../components/ToastProvider';
 import Dashboard from '../components/Dashboard';
 import LibraryView from '../components/LibraryView';
 import Sidebar from '../components/Sidebar';
@@ -8,11 +9,13 @@ import StudyView from '../components/StudyView';
 import StatsView from '../components/StatsView';
 import DeckEditorModal from '../components/DeckEditorModal';
 import DictionaryTool from '../components/DictionaryTool';
+import { List, Brain } from '@phosphor-icons/react';
 import { processReview } from '../lib/anki';
-import '../App.css'; // Inherited from prototype
+import '../App.css';
 
 const MainApp = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   
   const [currentView, setCurrentView] = useState('dashboard');
   const [activeDeckId, setActiveDeckId] = useState(null);
@@ -126,7 +129,7 @@ const MainApp = () => {
       // StudyView will manage the active session's queue in memory.
     } catch (error) {
       console.error("Error saving review:", error);
-      alert("Error saving review to database: " + error.message);
+      toast({ type: 'error', message: 'Error saving review: ' + error.message });
     }
   };
 
@@ -190,7 +193,7 @@ const MainApp = () => {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error("Export failed:", e);
-      alert("Failed to export deck");
+      toast({ type: 'error', message: 'Failed to export deck' });
     }
   };
 
@@ -202,10 +205,10 @@ const MainApp = () => {
           const content = e.target.result;
           await importDeck(user.id, content, file.name);
           fetchData(); 
-          alert("Deck imported successfully!");
+          toast({ type: 'success', message: 'Deck imported successfully!' });
         } catch (err) {
           console.error("Import failed:", err);
-          alert("Failed to import deck: " + err.message);
+          toast({ type: 'error', message: 'Failed to import deck: ' + err.message });
         }
       };
       reader.readAsText(file);
@@ -216,7 +219,15 @@ const MainApp = () => {
 
   // Render Views
   if (loading) {
-    return <div style={{color:'white', display:'flex', justifyContent:'center', alignItems:'center', height:'100vh'}}>Loading your decks...</div>;
+    return (
+      <div className="app-loading-screen">
+        <div className="loading-content">
+          <Brain size={48} weight="fill" color="var(--primary-color)" className="loading-logo" />
+          <h2 className="loading-title">Kwamjum</h2>
+          <div className="loading-spinner"></div>
+        </div>
+      </div>
+    );
   }
 
   const activeDeck = decks.find(d => d.id === activeDeckId);
@@ -226,8 +237,13 @@ const MainApp = () => {
       
       {/* Mobile Header (Only visible on small screens) */}
       <div className="mobile-header">
-        <button className="hamburger-btn" onClick={() => setIsMobileSidebarOpen(true)}>☰</button>
-        <h2>Kwamjum</h2>
+        <button className="hamburger-btn" onClick={() => setIsMobileSidebarOpen(true)} aria-label="Open menu">
+          <List size={24} />
+        </button>
+        <div className="mobile-brand">
+          <Brain size={22} weight="fill" color="var(--primary-color)" />
+          <h2>Kwamjum</h2>
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexGrow: 1 }}>

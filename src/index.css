@@ -1,41 +1,99 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Light Mode (Default) - Formal Corporate */
-  --bg-color: #F8FAFC; 
+  /* ─── Typography ─── */
+  --font-main: 'Open Sans', sans-serif;
+  --font-header: 'Poppins', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ─── Spacing Scale (8px rhythm) ─── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* ─── Border Radius ─── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ─── Shadows ─── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.12);
+
+  /* ─── Transitions ─── */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ─── Light Mode (Default) ─── */
+  --bg-color: #F8FAFC;
+  --bg-subtle: #F1F5F9;
   --text-primary: #0F172A;
   --text-secondary: #475569;
+  --text-tertiary: #94A3B8;
   --card-bg: #FFFFFF;
-  --font-main: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-header: 'Inter', sans-serif;
-  
-  --primary-color: #1E40AF; /* Blue-800 */
-  --primary-hover: #1E3A8A; /* Blue-900 */
-  --accent-color: #1E40AF; 
-  
+  --surface-elevated: #FFFFFF;
+
+  --primary-color: #1E40AF;
+  --primary-hover: #1E3A8A;
+  --primary-light: rgba(30, 64, 175, 0.08);
+  --accent-color: #1E40AF;
+
   --success-color: #059669;
+  --success-light: rgba(5, 150, 105, 0.1);
   --warning-color: #D97706;
+  --warning-light: rgba(217, 119, 6, 0.1);
   --danger-color: #DC2626;
+  --danger-light: rgba(220, 38, 38, 0.1);
+
   --border-color: #E2E8F0;
+  --border-subtle: #F1F5F9;
   --hover-bg: #F1F5F9;
   --input-bg: #FFFFFF;
   --ui-border: 1px;
+
+  /* ─── Focus Ring ─── */
+  --ring-color: rgba(30, 64, 175, 0.4);
+  --ring-offset: 2px;
 }
 
 [data-theme="dark"] {
-  /* Dark Mode - Formal Slate */
-  --bg-color: #0F172A; 
-  --text-primary: #F8FAFC;
+  --bg-color: #0B1120;
+  --bg-subtle: #131B2E;
+  --text-primary: #F1F5F9;
   --text-secondary: #94A3B8;
-  --card-bg: #1E293B; 
-  --border-color: #334155; 
-  --hover-bg: #0F172A;
-  --input-bg: #0F172A;
-  --primary-color: #3B82F6; /* Blue-500 */
-  --primary-hover: #2563EB; /* Blue-600 */
-  --accent-color: #3B82F6; 
+  --text-tertiary: #64748B;
+  --card-bg: #151D30;
+  --surface-elevated: #1A2540;
+
+  --primary-color: #3B82F6;
+  --primary-hover: #2563EB;
+  --primary-light: rgba(59, 130, 246, 0.12);
+  --accent-color: #3B82F6;
+
+  --success-light: rgba(5, 150, 105, 0.15);
+  --warning-light: rgba(217, 119, 6, 0.15);
+  --danger-light: rgba(220, 38, 38, 0.15);
+
+  --border-color: #1E293B;
+  --border-subtle: #1A2540;
+  --hover-bg: #1A2540;
+  --input-bg: #131B2E;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.35);
+
+  --ring-color: rgba(59, 130, 246, 0.5);
 }
 
 [data-font-size="small"] {
@@ -50,7 +108,8 @@
   font-size: 20px;
 }
 
-* {
+/* ─── Global Reset ─── */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -63,10 +122,63 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-header);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Focus Styles ─── */
+:focus-visible {
+  outline: 2px solid var(--ring-color);
+  outline-offset: var(--ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--ring-color);
+  outline-offset: var(--ring-offset);
+}
+
+/* ─── Smooth scrolling with reduced-motion respect ─── */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Scrollbar styling (Webkit) ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
 }
 
 #root {

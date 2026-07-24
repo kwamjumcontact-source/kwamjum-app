@@ -5,9 +5,17 @@ import { PlayCircle, Plus, Flame, Target } from '@phosphor-icons/react';
 import ActivityHeatmap from './ActivityHeatmap';
 import './Dashboard.css';
 
-const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck, onEditDeck, onViewStats, streak, reviewLogs }) => {
+const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck, onViewStats, streak, reviewLogs }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Time-based greeting
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
 
   // 1. Calculate due cards
   const totalDueCards = decks.reduce((acc, deck) => acc + (deck.dueToday || 0), 0);
@@ -78,7 +86,7 @@ const Dashboard = ({ decks, startStudy, totalStudied, dailyGoal = 20, onNewDeck,
 
         {/* HERO CTA SECTION */}
         <section className="hero-cta-section">
-          <h1 className="greeting">Welcome back! 👋</h1>
+          <h1 className="greeting">{getGreeting()}! 👋</h1>
           <div className="cta-card">
             <div className="cta-content">
               {totalDueCards > 0 ? (

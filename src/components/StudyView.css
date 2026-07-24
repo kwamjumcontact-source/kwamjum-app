@@ -206,3 +206,52 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.study-progress-bar {
+  height: 6px;
+  background-color: var(--border-color);
+  border-radius: var(--radius-full, 9999px);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.study-progress-fill {
+  height: 100%;
+  background-color: var(--primary-color);
+  border-radius: inherit;
+  transition: width 0.3s;
+}
+
+.study-progress-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.undo-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.undo-btn:hover {
+  border-color: var(--warning-color);
+  color: var(--warning-color);
+}
+
+.keyboard-hints {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 16px;
+  opacity: 0.6;
+}

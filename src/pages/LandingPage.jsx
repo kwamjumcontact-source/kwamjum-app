@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Brain, ChartLineUp, Infinity, CaretRight, ShieldCheck } from '@phosphor-icons/react';
+import { Brain, ChartLineUp, Infinity, CaretRight, ShieldCheck, CaretDown } from '@phosphor-icons/react';
 import './LandingPage.css';
+
+const faqData = [
+  {
+    q: 'How does spaced repetition work?',
+    a: 'Our algorithm tracks how well you know each card and schedules reviews at the optimal time — right before you would forget. This maximizes long-term retention with minimal study time.'
+  },
+  {
+    q: 'Is my data secure?',
+    a: 'Absolutely. All data is encrypted and stored securely in the cloud using Supabase (powered by PostgreSQL). Your flashcards are synced across all your devices in real-time.'
+  },
+  {
+    q: 'Can I import my existing flashcards?',
+    a: 'Yes! Kwamjum supports importing decks from JSON and CSV files. You can also export your decks at any time for backup or sharing.'
+  },
+  {
+    q: 'Is Kwamjum free to use?',
+    a: 'Yes, Kwamjum is completely free to use with all core features included. We believe effective learning tools should be accessible to everyone.'
+  },
+];
 
 const LandingPage = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const [openFaq, setOpenFaq] = useState(null);
 
   if (loading) {
     return (
@@ -16,7 +36,6 @@ const LandingPage = () => {
     );
   }
 
-  // If already logged in, go straight to dashboard
   if (user) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -37,9 +56,9 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <header className="hero-section">
-        <div className="hero-badge">Kwamjum v2.0 is here</div>
+        <div className="hero-badge">Kwamjum v3.0 — Now with keyboard shortcuts</div>
         <h1 className="hero-title">
-          Master any topic, 
+          Master any topic,
           <span className="text-gradient"> significantly faster.</span>
         </h1>
         <p className="hero-subtitle">
@@ -58,7 +77,7 @@ const LandingPage = () => {
 
       {/* Product Mockup Section */}
       <section className="mockup-section">
-        <div className="mockup-container">
+        <div className="mockup-container" aria-hidden="true">
           <div className="mockup-header">
             <div className="mockup-dots">
               <span></span><span></span><span></span>
@@ -109,6 +128,26 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="faq-section">
+        <div className="faq-header">
+          <h2>Frequently Asked Questions</h2>
+        </div>
+        <div className="faq-list">
+          {faqData.map((item, i) => (
+            <div key={i} className={`faq-item ${openFaq === i ? 'open' : ''}`}>
+              <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)} aria-expanded={openFaq === i}>
+                <span>{item.q}</span>
+                <CaretDown size={20} weight="bold" className="faq-caret" />
+              </button>
+              <div className="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="landing-footer">
         <div className="footer-content">
@@ -116,7 +155,7 @@ const LandingPage = () => {
             <Brain size={24} weight="fill" color="var(--primary-color)" />
             <span>Kwamjum</span>
           </div>
-          <p className="footer-copyright">© 2026 Kwamjum Inc. All rights reserved.</p>
+          <p className="footer-copyright">&copy; {new Date().getFullYear()} Kwamjum Inc. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Flashcard from './Flashcard';
 import { calculateNextIntervals, formatTime, processReview } from '../lib/anki';
-import { CheckCircle, HourglassHigh, FastForward } from '@phosphor-icons/react';
+import { CheckCircle, HourglassHigh, FastForward, ArrowCounterClockwise } from '@phosphor-icons/react';
 import './StudyView.css';
 
 const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRating, onFinish }) => {
@@ -17,6 +17,11 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
   const [isFlipped, setIsFlipped] = useState(false);
   const [sessionCompleted, setSessionCompleted] = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [lastAction, setLastAction] = useState(null);
+
+  const totalCards = initialDueCards.length;
+  const completedCards = totalCards - queue.length;
+  const progressPercentage = totalCards > 0 ? (completedCards / totalCards) * 100 : 100;
 
   // Update current time every second to handle "waiting" states
   useEffect(() => {
@@ -46,6 +51,45 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
     return null;
   }, [currentCard]);
 
+  const handleUndo = () => {
+    if (!lastAction) return;
+    setQueue(lastAction.previousQueue);
+    setIsFlipped(false);
+    setLastAction(null);
+  };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (!isFlipped && currentCard && !isWaiting) {
+          setIsFlipped(true);
+        }
+      } else if (isFlipped) {
+        if (e.key === '1') handleRatingClick('again');
+        if (e.key === '2') handleRatingClick('hard');
+        if (e.key === '3') handleRatingClick('good');
+        if (e.key === '4') handleRatingClick('easy');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
+
+  // Clear lastAction after 10s
+  useEffect(() => {
+    let timer;
+    if (lastAction) {
+      timer = setTimeout(() => {
+        setLastAction(null);
+      }, 10000);
+    }
+    return () => clearTimeout(timer);
+  }, [lastAction]);
+
   // Calculate Anki-style counters (New, Learning, Review)
   const counts = useMemo(() => {
     let n = 0, l = 0, r = 0;
@@ -66,6 +110,12 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
     // 1. Tell parent to save to DB (MainApp handles DB logic)
     onRating(currentCard.id, rating);
     
+    // Save state for undo
+    setLastAction({
+      card: currentCard,
+      previousQueue: [...queue]
+    });
+
     // 2. Predict next state locally
     const simulatedNextState = processReview(currentCard, rating);
     const newIntervalDays = simulatedNextState.interval;
@@ -156,8 +206,24 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
 
   return (
     <div className="study-view-container">
+      {totalCards > 0 && (
+        <div className="study-progress-container">
+          <div className="study-progress-text">
+            {completedCards} of {totalCards} cards completed ({Math.round(progressPercentage)}%)
+          </div>
+          <div className="study-progress-bar">
+            <div className="study-progress-fill" style={{ width: `${progressPercentage}%` }}></div>
+          </div>
+        </div>
+      )}
+
       <div className="study-header">
         <span className="deck-title">{deck.title}</span>
+        {lastAction && (
+          <button className="undo-btn" onClick={handleUndo}>
+            <ArrowCounterClockwise size={16} /> Undo
+          </button>
+        )}
         <div className="anki-counters">
           <span className="count-new" title="New Cards">{counts.new}</span>
           <span className="count-learn" title="Learning Cards">{counts.learn}</span>
@@ -172,24 +238,29 @@ const StudyView = ({ deck, dueCards: initialDueCards, autoFlipSeconds = 0, onRat
       />
 
       {isFlipped ? (
-        <div className="rating-buttons">
-          <button className="rating-btn again" onClick={() => handleRatingClick('again')}>
-            <span className="rating-time">{formatTime(nextIntervals.again)}</span>
-            <span className="rating-label">Again</span>
-          </button>
-          <button className="rating-btn hard" onClick={() => handleRatingClick('hard')}>
-            <span className="rating-time">{formatTime(nextIntervals.hard)}</span>
-            <span className="rating-label">Hard</span>
-          </button>
-          <button className="rating-btn good" onClick={() => handleRatingClick('good')}>
-            <span className="rating-time">{formatTime(nextIntervals.good)}</span>
-            <span className="rating-label">Good</span>
-          </button>
-          <button className="rating-btn easy" onClick={() => handleRatingClick('easy')}>
-            <span className="rating-time">{formatTime(nextIntervals.easy)}</span>
-            <span className="rating-label">Easy</span>
-          </button>
-        </div>
+        <>
+          <div className="rating-buttons">
+            <button className="rating-btn again" onClick={() => handleRatingClick('again')}>
+              <span className="rating-time">{formatTime(nextIntervals.again)}</span>
+              <span className="rating-label">Again</span>
+            </button>
+            <button className="rating-btn hard" onClick={() => handleRatingClick('hard')}>
+              <span className="rating-time">{formatTime(nextIntervals.hard)}</span>
+              <span className="rating-label">Hard</span>
+            </button>
+            <button className="rating-btn good" onClick={() => handleRatingClick('good')}>
+              <span className="rating-time">{formatTime(nextIntervals.good)}</span>
+              <span className="rating-label">Good</span>
+            </button>
+            <button className="rating-btn easy" onClick={() => handleRatingClick('easy')}>
+              <span className="rating-time">{formatTime(nextIntervals.easy)}</span>
+              <span className="rating-label">Easy</span>
+            </button>
+          </div>
+          <div className="keyboard-hints">
+            Keyboard: Space to flip · 1 Again · 2 Hard · 3 Good · 4 Easy
+          </div>
+        </>
       ) : (
         <div className="show-answer-container">
           {autoFlipSeconds > 0 && (

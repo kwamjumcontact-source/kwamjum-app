@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ToastProvider } from './components/ToastProvider';
 import LandingPage from './pages/LandingPage';
 import Auth from './pages/Auth';
 import ResetPassword from './pages/ResetPassword';
@@ -16,43 +17,45 @@ function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <Router>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<Auth />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          
-          {/* Protected Routes */}
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute>
-                <MainApp />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/account" 
-            element={
-              <ProtectedRoute>
-                <AccountSettings />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/help" 
-            element={
-              <ProtectedRoute>
-                <HelpFeedback />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Public Landing Page */}
-          <Route path="/" element={<LandingPage />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+        <ToastProvider>
+          <Router>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Auth />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            
+            {/* Protected Routes */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <MainApp />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/account" 
+              element={
+                <ProtectedRoute>
+                  <AccountSettings />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/help" 
+              element={
+                <ProtectedRoute>
+                  <HelpFeedback />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Public Landing Page */}
+            <Route path="/" element={<LandingPage />} />
+          </Routes>
+        </Router>
+        </ToastProvider>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }
