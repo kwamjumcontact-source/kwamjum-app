@@ -37,7 +37,11 @@ const ResetPassword = () => {
       alert('Password updated successfully! You can now access your account.');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message || 'Error updating password.');
+      const rawMsg = err.message || '';
+      const msg = rawMsg.includes('Failed to fetch')
+        ? 'Cannot connect to database server. Please check your network connection or Supabase URL.'
+        : (rawMsg || 'Error updating password.');
+      setError(msg);
     } finally {
       setLoading(false);
     }

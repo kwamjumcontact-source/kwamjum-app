@@ -33,7 +33,11 @@ const Auth = () => {
       if (error) throw error;
       setResetSent(true);
     } catch (err) {
-      setError(err.message || 'Error sending reset email');
+      const rawMsg = err.message || '';
+      const msg = rawMsg.includes('Failed to fetch')
+        ? 'Cannot connect to database server. Please check your network or Supabase URL configuration.'
+        : (rawMsg || 'Error sending reset email');
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -61,11 +65,15 @@ const Auth = () => {
           date_of_birth: dob
         });
         if (error) throw error;
-        alert('Registration successful! You can now log in.');
+        toast ? toast({ type: 'success', message: 'Registration successful! You can now log in.' }) : alert('Registration successful! You can now log in.');
         setIsLogin(true);
       }
     } catch (err) {
-      setError(err.message || 'An error occurred during authentication.');
+      const rawMsg = err.message || '';
+      const msg = rawMsg.includes('Failed to fetch')
+        ? 'Cannot connect to database server. Please verify your Supabase URL & network connection.'
+        : (rawMsg || 'An error occurred during authentication.');
+      setError(msg);
     } finally {
       setLoading(false);
     }
